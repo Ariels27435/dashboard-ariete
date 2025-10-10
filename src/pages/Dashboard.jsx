@@ -6,7 +6,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const intervalo = setInterval(() => {
-      fetch('http://10.183.6.170:3000/api/estado')
+     fetch('https://backend-ariete.onrender.com/api/estado')
         .then(res => res.json())
         .then(data => {
           setSensorData([
