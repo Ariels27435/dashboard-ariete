@@ -32,7 +32,7 @@ function App() {
     try {
       console.log('🔄 Obteniendo datos del backend...');
       
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      const API_URL = import.meta.env.VITE_API_URL || 'https://dashboard-ariete-5gz6eecd1-ariel-celico-lopez-de-leons-projects.vercel.app';
       const response = await fetch(`${API_URL}/api/esp32/sensores?api_key=ariete-esp32-2025`);
       
       if (response.ok) {
