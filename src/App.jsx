@@ -176,7 +176,7 @@ function App() {
         {sensores.map((sensor) => (
           <div key={sensor.id} style={{ padding: '24px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', borderLeft: '4px solid #3b82f6' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-              <div style={{ fontSize: '32px' }}>{sensor.icono}</div>
+              <div style={{ fontSize: '48px' }}>{sensor.icono}</div>
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: '12px', color: '#6b7280' }}>Estado</div>
                 <div style={{ fontSize: '12px', fontWeight: '600', color: '#059669' }}>✅ OK</div>
