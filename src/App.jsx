@@ -140,7 +140,7 @@ function App() {
         <div>
           <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#1f2937', margin: '0 0 4px 0' }}>Dashboard Ariete - FUNCIONAL</h1>
           <p style={{ fontSize: '14px', color: '#6b7280', margin: '0', fontStyle: 'italic' }}>
-            Creado por Ariel Celico López de León
+            Creado por Ariel Celico López de León ✨
           </p>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
