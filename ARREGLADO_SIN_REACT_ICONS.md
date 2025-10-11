@@ -124,3 +124,4 @@ npm run dev
 
 **¡Ya está todo arreglado! No necesitas instalar nada más. 🚀📊**
 
+

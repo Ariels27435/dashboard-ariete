@@ -213,3 +213,4 @@ Si sigues teniendo problemas, revisa:
 - Los logs del backend para ver errores
 
 
+

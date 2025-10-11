@@ -477,3 +477,4 @@ Ver carpeta `ejemplos/` (crear si necesitas más ejemplos específicos)
 **¡Felicidades! Tu ESP32 ahora envía datos reales al dashboard! 🎉🔌📊**
 
 
+

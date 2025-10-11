@@ -177,3 +177,4 @@ admin@ariete.com / admin123
 **¡Listo! Ya puedes ver tu dashboard funcionando! 📊✨**
 
 
+

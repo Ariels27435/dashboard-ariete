@@ -114,3 +114,4 @@ ESP32 → Puerto 3001 → Backend → MongoDB → Dashboard (Puerto 5177)
 
 ¿Qué te aparece cuando ejecutas ese comando?
 
+

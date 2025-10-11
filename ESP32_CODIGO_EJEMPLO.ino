@@ -292,3 +292,4 @@ void enviarMultiplesLecturas(float temp, float pres, float caudal) {
 }
 
 
+

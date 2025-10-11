@@ -71,3 +71,4 @@ void loop() {
   // Nada aquí, todo se maneja por interrupciones y temporizador
 }
 
+
