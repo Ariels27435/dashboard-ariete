@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 
 function App() {
   const [sensores, setSensores] = useState([
-    {
-      id: 'humedad',
-      nombre: 'Sensor Humedad Ariete',
-      valor: 0,
-      unidad: '%',
-      icono: '🌫️'
-    },
+      {
+        id: 'humedad',
+        nombre: 'Sensor Humedad Ariete',
+        valor: 0,
+        unidad: '%',
+        icono: '☁️'
+      },
     {
       id: 'flujo',
       nombre: 'Sensor Flujo Ariete',
@@ -52,7 +52,7 @@ function App() {
                 nombre: 'Sensor Humedad Ariete',
                 valor: sensoresAriete.find(s => s.tipo === 'humedad')?.ultimaLectura?.valor || 0,
                 unidad: '%',
-                icono: '🌫️'
+                icono: '☁️'
               },
               {
                 id: 'flujo',
@@ -100,7 +100,7 @@ function App() {
         nombre: 'Sensor Humedad Ariete',
         valor: 39,
         unidad: '%',
-        icono: '🌫️'
+        icono: '☁️'
       },
       {
         id: 'flujo',
