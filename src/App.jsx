@@ -176,7 +176,27 @@ function App() {
         {sensores.map((sensor) => (
           <div key={sensor.id} style={{ padding: '24px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', borderLeft: '4px solid #3b82f6' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-              <div style={{ fontSize: '48px' }}>{sensor.icono}</div>
+              <div style={{ 
+                fontSize: sensor.id === 'humedad' ? '0px' : '48px',
+                width: sensor.id === 'humedad' ? '60px',
+                height: sensor.id === 'humedad' ? '40px',
+                display: sensor.id === 'humedad' ? 'flex' : 'block',
+                alignItems: sensor.id === 'humedad' ? 'center' : 'normal',
+                justifyContent: sensor.id === 'humedad' ? 'center' : 'normal'
+              }}>
+                {sensor.id === 'humedad' ? (
+                  <svg width="60" height="40" viewBox="0 0 60 40" fill="none">
+                    <path d="M45 25C45 30.5228 40.5228 35 35 35H15C9.47715 35 5 30.5228 5 25C5 19.4772 9.47715 15 15 15C15 10.0294 18.0294 6 23 6C27.9706 6 31 10.0294 31 15C35.5228 15 40 19.4772 40 25H45Z" fill="#8B5CF6" stroke="#7C3AED" strokeWidth="1"/>
+                    <circle cx="20" cy="18" r="3" fill="#A78BFA"/>
+                    <circle cx="30" cy="15" r="2" fill="#A78BFA"/>
+                    <circle cx="40" cy="18" r="2.5" fill="#A78BFA"/>
+                    <circle cx="35" cy="12" r="2" fill="#A78BFA"/>
+                    <circle cx="25" cy="12" r="1.5" fill="#A78BFA"/>
+                  </svg>
+                ) : (
+                  sensor.icono
+                )}
+              </div>
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: '12px', color: '#6b7280' }}>Estado</div>
                 <div style={{ fontSize: '12px', fontWeight: '600', color: '#059669' }}>✅ OK</div>
