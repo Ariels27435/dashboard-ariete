@@ -9,8 +9,28 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Configuración de CORS para producción
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Permitir requests sin origen (como aplicaciones móviles o Postman)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = process.env.CORS_ORIGIN 
+      ? process.env.CORS_ORIGIN.split(',')
+      : ['http://localhost:5173', 'http://localhost:5177', 'http://localhost:3000'];
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+      callback(null, true);
+    } else {
+      callback(new Error('No permitido por CORS'));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Conectar a MongoDB
@@ -36,6 +56,12 @@ app.use('/api/usuarios', require('./routes/usuarios'));
 app.use('/api/reportes', require('./routes/reportes'));
 app.use('/api/configuracion', require('./routes/configuracion'));
 
+// Ruta especial para ESP32 (sin autenticación JWT, usa API Key)
+app.use('/api/esp32', require('./routes/esp32'));
+
+// Rutas compatibles con código ESP32 original (sin autenticación para compatibilidad)
+app.use('/api', require('./routes/ariete-directo'));
+
 // Ruta de prueba
 app.get('/api/health', (req, res) => {
   res.json({ 
@@ -60,8 +86,9 @@ app.use((req, res) => {
 });
 
 // Iniciar servidor
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Servidor ejecutándose en puerto ${PORT}`);
+  console.log(`📊 Ambiente: ${process.env.NODE_ENV || 'development'}`);
   console.log(`📊 Dashboard disponible en: http://localhost:${PORT}`);
 });
 

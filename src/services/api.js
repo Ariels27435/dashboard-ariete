@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 // Configuración base de la API
-const API_BASE_URL = 'http://localhost:3001/api';
+// En producción, Vite reemplaza import.meta.env.VITE_API_URL con el valor de la variable de entorno
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 // Crear instancia de axios con configuración base
 const api = axios.create({

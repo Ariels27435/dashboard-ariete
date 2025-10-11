@@ -32,8 +32,7 @@ function App() {
     try {
       console.log('🔄 Obteniendo datos del backend...');
       
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-      const response = await fetch(`${API_URL}/api/esp32/sensores?api_key=ariete-esp32-2025`);
+      const response = await fetch('http://localhost:3001/api/esp32/sensores?api_key=ariete-esp32-2025');
       
       if (response.ok) {
         const data = await response.json();
@@ -83,14 +82,6 @@ function App() {
     }
   };
 
-  // Actualizar datos cada 3 segundos
-  useEffect(() => {
-    const interval = setInterval(obtenerDatosBackend, 3000);
-    obtenerDatosBackend(); // Cargar datos inmediatamente
-
-    return () => clearInterval(interval);
-  }, []);
-
   // Función para simular datos del ESP32
   const simularDatosESP32 = () => {
     console.log('🎮 Simulando datos del ESP32...');
@@ -134,6 +125,14 @@ function App() {
     console.log('✅ Datos aleatorios generados');
   };
 
+  // Actualizar datos cada 3 segundos
+  useEffect(() => {
+    const interval = setInterval(obtenerDatosBackend, 3000);
+    obtenerDatosBackend(); // Cargar datos inmediatamente
+    
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div style={{ padding: '24px', backgroundColor: '#f3f4f6', minHeight: '100vh' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
@@ -151,12 +150,12 @@ function App() {
           >
             📤 Datos Aleatorios
           </button>
-      <button
+          <button
             onClick={simularDatosESP32}
             style={{ padding: '8px 16px', backgroundColor: '#8b5cf6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-      >
+          >
             🎮 Simular ESP32
-      </button>
+          </button>
         </div>
       </div>
 
@@ -206,7 +205,7 @@ function App() {
         <div style={{ fontSize: '14px' }}>
           <p><strong>1. 📤 Datos Aleatorios:</strong> Genera valores aleatorios para todos los sensores</p>
           <p><strong>2. 🎮 Simular ESP32:</strong> Simula los datos reales del ESP32 (Humedad: 39%, Flujo: 0.00 L/min, Nivel: 0%)</p>
-          <p><strong>3. 🔄 Recargar:</strong> Refresca el dashboard</p>
+          <p><strong>3. 🔄 Recargar:</strong> Obtiene los datos reales del backend</p>
         </div>
       </div>
 
@@ -214,12 +213,12 @@ function App() {
         <h3 style={{ fontWeight: 'bold', marginBottom: '8px' }}>🔧 Información Técnica:</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', fontSize: '14px' }}>
           <div>
-            <p><strong>🌐 Backend:</strong> {import.meta.env.VITE_API_URL || 'http://localhost:3001'}</p>
-            <p><strong>📱 Frontend:</strong> {window.location.origin}</p>
+            <p><strong>🌐 Backend:</strong> http://localhost:3001</p>
+            <p><strong>📱 Frontend:</strong> http://localhost:5177</p>
           </div>
           <div>
             <p><strong>📊 Sensores:</strong> {sensores.length} del Ariete</p>
-            <p><strong>⚡ React:</strong> Versión simple sin dependencias</p>
+            <p><strong>⚡ React:</strong> Versión funcional</p>
           </div>
         </div>
       </div>

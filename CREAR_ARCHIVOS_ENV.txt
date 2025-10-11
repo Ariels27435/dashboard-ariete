@@ -1,0 +1,73 @@
+================================================================
+IMPORTANTE: Necesitas crear los archivos de variables de entorno
+================================================================
+
+1. PARA EL FRONTEND (desarrollo local):
+   ----------------------------------------
+   Crea un archivo llamado: .env
+   En la ubicación: C:\Arieter hidraulico\dashboard-ariete\.env
+   
+   Con este contenido:
+   
+   VITE_API_URL=http://localhost:3001/api
+
+
+2. PARA EL FRONTEND (producción):
+   ----------------------------------------
+   Crea un archivo llamado: .env.production
+   En la ubicación: C:\Arieter hidraulico\dashboard-ariete\.env.production
+   
+   Con este contenido (REEMPLAZA con tu URL real de Render):
+   
+   VITE_API_URL=https://tu-backend.onrender.com/api
+
+
+3. PARA EL BACKEND (desarrollo y producción):
+   ----------------------------------------
+   Crea un archivo llamado: .env
+   En la ubicación: C:\Arieter hidraulico\dashboard-ariete\backend\.env
+   
+   Con este contenido:
+   
+   PORT=3001
+   NODE_ENV=development
+   MONGODB_URI=mongodb://localhost:27017/ariete_db
+   JWT_SECRET=tu_jwt_secret_super_seguro_aqui
+   CORS_ORIGIN=http://localhost:5173
+   JWT_EXPIRES_IN=7d
+
+   NOTA: Si usas MongoDB Atlas, reemplaza MONGODB_URI con tu connection string.
+
+
+CÓMO CREAR ESTOS ARCHIVOS:
+---------------------------
+Opción 1: Usar el Bloc de Notas
+1. Abre el Bloc de Notas
+2. Copia el contenido correspondiente
+3. Guarda como "Todos los archivos" (no como .txt)
+4. Ponle el nombre exacto: .env
+
+Opción 2: Desde la terminal PowerShell
+cd "C:\Arieter hidraulico\dashboard-ariete"
+New-Item -Path ".env" -ItemType File
+notepad .env
+(Pega el contenido y guarda)
+
+Opción 3: Desde VSCode/Cursor
+1. Click derecho en la carpeta
+2. New File
+3. Nombra el archivo: .env
+4. Pega el contenido
+
+
+¿POR QUÉ NECESITAS ESTO?
+-------------------------
+Los archivos .env contienen información sensible (contraseñas, URLs, etc.)
+por eso NO se suben a GitHub. Cada desarrollador los crea localmente.
+
+En Vercel y Render, configurarás estas variables directamente en su panel web.
+
+
+================================================================
+
+

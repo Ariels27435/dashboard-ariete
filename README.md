@@ -125,42 +125,43 @@ dashboard-ariete/
 
 ## 🔧 Configuración de Variables de Entorno
 
-### Backend (.env)
+### Backend (backend/.env)
 ```env
 PORT=3001
 NODE_ENV=development
 MONGODB_URI=mongodb://localhost:27017/ariete_db
 JWT_SECRET=tu_jwt_secret_muy_seguro_aqui
 CORS_ORIGIN=http://localhost:5173
+JWT_EXPIRES_IN=7d
 ```
 
 ### Frontend (.env)
 ```env
-REACT_APP_API_URL=http://localhost:3001/api
+VITE_API_URL=http://localhost:3001/api
 ```
 
-## 🚀 Despliegue
+**Nota**: Los archivos `.env` están en `.gitignore` por seguridad. Usa `env.example` como referencia.
 
-### GitHub Pages
-```bash
-# Configurar el homepage en package.json
-"homepage": "https://tu-usuario.github.io/dashboard-ariete"
+## 🚀 Despliegue en Producción
 
-# Desplegar
-npm run deploy
-```
+Para desplegar tu aplicación en la web y que sea accesible globalmente, **sigue la guía completa**:
 
-### Vercel (Recomendado)
-1. Subir el proyecto a GitHub
-2. Conectar con Vercel
-3. Configurar variables de entorno
-4. Desplegar automáticamente
+👉 **[GUIA_DESPLIEGUE.md](./GUIA_DESPLIEGUE.md)** 👈
 
-### Backend (Heroku/Railway)
-1. Crear cuenta en Heroku o Railway
-2. Conectar con el repositorio
-3. Configurar variables de entorno
-4. Desplegar
+La guía incluye:
+- ✅ Configuración de MongoDB Atlas (base de datos en la nube - GRATIS)
+- ✅ Despliegue del backend en Render (GRATIS)
+- ✅ Despliegue del frontend en Vercel (GRATIS)
+- ✅ Configuración de variables de entorno
+- ✅ Solución de problemas comunes
+- ✅ Instrucciones paso a paso con capturas
+
+### Resumen Rápido:
+1. **MongoDB Atlas** → Base de datos en la nube
+2. **Render** → Backend API (Node.js/Express)
+3. **Vercel** → Frontend (React)
+4. Conectar todo con variables de entorno
+5. ¡Listo! Tu app estará en la web 🌍
 
 ## 📊 API Endpoints
 

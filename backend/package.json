@@ -7,6 +7,8 @@
     "dev": "nodemon server.js",
     "dev-mock": "nodemon server-mock.js",
     "init-data": "node scripts/initData.js",
+    "init-ariete": "node scripts/initSensoresAriete.js",
+    "crear-sensores": "node scripts/crearSensoresManual.js",
     "check-mongo": "node scripts/checkMongo.js",
     "test-connection": "node scripts/testConnection.js",
     "test": "echo \"Error: no test specified\" && exit 1"
