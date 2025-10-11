@@ -16,9 +16,10 @@ function App() {
     const fetchSensores = async () => {
       try {
         const res = await fetch('https://backend-ariete.onrender.com/api/sensores');
-        const data = await res.json();
+        console.log('Respuesta cruda:', res); // Verifica si responde algo
 
-        console.log('Datos recibidos:', data);
+        const data = await res.json();
+        console.log('Datos recibidos:', data); // Verifica si llegan los datos
 
         const formateados = data.map(sensor => ({
           title: sensor.nombre,
@@ -48,6 +49,17 @@ function App() {
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Dashboard Ariete</h1>
+
+      <button
+        onClick={() => window.location.reload()}
+        className="mb-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        Recargar Dashboard
+      </button>
+
+      <p className="text-sm text-gray-600 mb-4">
+        Sensores cargados: {sensores.length}
+      </p>
 
       {loading ? (
         <p className="text-gray-500">Cargando sensores...</p>
