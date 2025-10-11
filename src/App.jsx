@@ -9,5 +9,7 @@ function App() {
     }}>
       ¡Render confirmado desde App.jsx!
     </div>
-  )
+  );
 }
+
+export default App;
