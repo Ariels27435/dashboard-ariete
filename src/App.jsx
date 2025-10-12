@@ -167,37 +167,37 @@ function App() {
       {/* Contenido del dashboard */}
       <div className="dashboard-content" style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
         {/* Título arriba como estaba originalmente */}
-        <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start', marginBottom: 'auto', paddingTop: '10px' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start', marginBottom: 'auto', paddingTop: '5px' }}>
           <div>
-            <h1 style={{ fontSize: '28px', fontWeight: '900', color: '#000000', margin: '0', textShadow: '2px 2px 4px rgba(255,255,255,0.8)' }}>Dashboard Ariete Hidráulico 🌿</h1>
+            <h1 style={{ fontSize: '24px', fontWeight: '900', color: '#000000', margin: '0', textShadow: '2px 2px 4px rgba(255,255,255,0.8)' }}>Dashboard Ariete Hidráulico 🌿</h1>
           </div>
         </div>
 
         {/* Contenido en la parte inferior centrado */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '10px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '5px' }}>
           {/* Todos los sensores en línea horizontal centrados */}
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '6px', marginBottom: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
             {sensores.map((sensor) => (
-              <div key={sensor.id} style={{ padding: '12px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', borderLeft: '4px solid #3b82f6', maxWidth: '320px', minWidth: '280px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                  <div style={{ fontSize: '40px' }}>{sensor.icono}</div>
+              <div key={sensor.id} style={{ padding: '8px', backgroundColor: 'white', borderRadius: '6px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', borderLeft: '3px solid #3b82f6', maxWidth: '280px', minWidth: '240px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                  <div style={{ fontSize: '32px' }}>{sensor.icono}</div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '10px', color: '#6b7280' }}>Estado</div>
-                    <div style={{ fontSize: '10px', fontWeight: '600', color: '#059669' }}>✅ OK</div>
+                    <div style={{ fontSize: '8px', color: '#6b7280' }}>Estado</div>
+                    <div style={{ fontSize: '8px', fontWeight: '600', color: '#059669' }}>✅ OK</div>
                   </div>
                 </div>
                 
-                <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#1f2937', marginBottom: '6px' }}>{sensor.nombre}</h2>
+                <h2 style={{ fontSize: '14px', fontWeight: 'bold', color: '#1f2937', marginBottom: '4px' }}>{sensor.nombre}</h2>
                 
-                <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#2563eb', marginBottom: '6px' }}>
-                  {sensor.valor} <span style={{ fontSize: '14px', color: '#6b7280' }}>{sensor.unidad}</span>
+                <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#2563eb', marginBottom: '4px' }}>
+                  {sensor.valor} <span style={{ fontSize: '12px', color: '#6b7280' }}>{sensor.unidad}</span>
                 </div>
                 
                 {sensor.unidad === '%' && (
-                  <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '8px', marginBottom: '6px' }}>
+                  <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '6px', marginBottom: '4px' }}>
                     <div
                       style={{ 
-                        height: '8px', 
+                        height: '6px', 
                         borderRadius: '9999px', 
                         backgroundColor: '#3b82f6', 
                         transition: 'width 0.3s ease',
@@ -211,8 +211,8 @@ function App() {
           </div>
 
           {/* Barra de información centrada */}
-          <div style={{ padding: '8px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', maxWidth: '100%' }}>
-            <p style={{ fontSize: '12px', color: '#6b7280', margin: 0, textAlign: 'center' }}>
+          <div style={{ padding: '6px', backgroundColor: 'white', borderRadius: '6px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', maxWidth: '100%' }}>
+            <p style={{ fontSize: '10px', color: '#6b7280', margin: 0, textAlign: 'center' }}>
               <strong>📊 Sensores Ariete:</strong> {sensores.length} | 
               <strong> 🕐 Última actualización:</strong> {ultimaActualizacion} | 
               <strong> 🌐 Frontend:</strong> <a href={window.location.origin} target="_blank" rel="noopener noreferrer" style={{ color: '#3b82f6', textDecoration: 'none' }}>{window.location.origin}</a> |
