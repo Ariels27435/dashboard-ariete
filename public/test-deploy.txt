@@ -1,0 +1,2 @@
+Este archivo confirma que el despliegue está funcionando correctamente.
+Creado: $(date)
