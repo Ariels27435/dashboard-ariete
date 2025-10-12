@@ -165,16 +165,16 @@ function App() {
       {/* Overlay semi-transparente para mejorar legibilidad */}
       <div className="dashboard-overlay"></div>
       {/* Contenido del dashboard */}
-      <div className="dashboard-content" style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
-        {/* Título arriba como estaba originalmente */}
-        <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start', marginBottom: 'auto', paddingTop: '5px' }}>
+      <div className="dashboard-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', justifyContent: 'space-between', padding: '10px 20px' }}>
+        {/* Título arriba */}
+        <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
           <div>
             <h1 style={{ fontSize: '24px', fontWeight: '900', color: '#000000', margin: '0', textShadow: '2px 2px 4px rgba(255,255,255,0.8)' }}>Dashboard Ariete Hidráulico 🌿</h1>
           </div>
         </div>
 
-        {/* Contenido en la parte inferior centrado */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '5px' }}>
+        {/* Contenido en el medio centrado */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: '1' }}>
           {/* Todos los sensores en línea horizontal centrados */}
           <div style={{ display: 'flex', gap: '6px', marginBottom: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
             {sensores.map((sensor) => (
@@ -209,8 +209,10 @@ function App() {
               </div>
             ))}
           </div>
+        </div>
 
-          {/* Barra de información centrada */}
+        {/* Barra de información en la parte inferior */}
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
           <div style={{ padding: '6px', backgroundColor: 'white', borderRadius: '6px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', maxWidth: '100%' }}>
             <p style={{ fontSize: '10px', color: '#6b7280', margin: 0, textAlign: 'center' }}>
               <strong>📊 Sensores Ariete:</strong> {sensores.length} | 
