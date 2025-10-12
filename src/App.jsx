@@ -216,14 +216,6 @@ function App() {
         ))}
       </div>
 
-      <div style={{ padding: '16px', backgroundColor: '#dbeafe', borderRadius: '8px' }}>
-        <h3 style={{ fontWeight: 'bold', marginBottom: '8px' }}>🔧 Instrucciones:</h3>
-        <div style={{ fontSize: '14px' }}>
-          <p><strong>1. 📤 Datos Aleatorios:</strong> Genera valores aleatorios para todos los sensores</p>
-          <p><strong>2. 🎮 Simular ESP32:</strong> Simula los datos reales del ESP32 (Humedad: 39%, Flujo: 0.00 L/min, Nivel: 0%)</p>
-          <p><strong>3. 🔄 Recargar:</strong> Refresca el dashboard</p>
-        </div>
-      </div>
 
       <div style={{ marginTop: '16px', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
         <h3 style={{ fontWeight: 'bold', marginBottom: '8px' }}>🔧 Información Técnica:</h3>
