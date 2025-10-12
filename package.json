@@ -7,9 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview"
   },
   "dependencies": {
     "axios": "^1.7.9",
@@ -34,5 +32,4 @@
     "tailwindcss": "^3.4.17",
     "vite": "^5.4.10"
   },
-  "homepage": "https://tu-usuario.github.io/dashboard-ariete"
 }
