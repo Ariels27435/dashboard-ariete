@@ -168,7 +168,7 @@ function App() {
       <div className="dashboard-content">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#1f2937', margin: '0 0 4px 0' }}>Dashboard Ariete - FUNCIONAL 🌿✨</h1>
+          <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#1f2937', margin: '0 0 4px 0' }}>Dashboard Ariete - FUNCIONAL 🌿✨🚀</h1>
           <p style={{ fontSize: '14px', color: '#6b7280', margin: '0', fontStyle: 'italic' }}>
             Creado por Ariel Celico López de León ✨
           </p>
