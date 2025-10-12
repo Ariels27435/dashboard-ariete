@@ -165,18 +165,18 @@ function App() {
       {/* Overlay semi-transparente para mejorar legibilidad */}
       <div className="dashboard-overlay"></div>
       {/* Contenido del dashboard */}
-      <div className="dashboard-content" style={{ display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'space-between', padding: '20px' }}>
+      <div className="dashboard-content" style={{ display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'flex-start', padding: '20px' }}>
         {/* Título arriba */}
-        <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start', marginBottom: 'auto' }}>
           <div>
-            <h1 style={{ fontSize: '28px', fontWeight: '900', color: '#000000', margin: '0', textShadow: '2px 2px 4px rgba(255,255,255,0.8)' }}>Dashboard Ariete Hidráulico 🌿</h1>
+            <h1 style={{ fontSize: '28px', fontWeight: '900', color: '#ffffff', margin: '0', textShadow: '3px 3px 6px rgba(0,0,0,0.8)', fontFamily: 'Arial, sans-serif', letterSpacing: '1px' }}>Dashboard Ariete Hidráulico 🌿</h1>
           </div>
         </div>
 
-        {/* Contenido en el medio centrado */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: '1' }}>
+        {/* Contenido en la parte inferior centrado */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', paddingBottom: '20px' }}>
           {/* Todos los sensores en línea horizontal centrados */}
-          <div style={{ display: 'flex', gap: '15px', marginBottom: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '15px', marginBottom: '5px', justifyContent: 'center', flexWrap: 'wrap' }}>
             {sensores.map((sensor) => (
               <div key={sensor.id} style={{ padding: '15px', backgroundColor: 'white', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.15)', borderLeft: '4px solid #3b82f6', width: '320px', minHeight: '200px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
