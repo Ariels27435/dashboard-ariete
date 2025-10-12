@@ -178,7 +178,8 @@ function App() {
       <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
         <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>
           <strong>📊 Sensores Ariete:</strong> {sensores.length} | 
-          <strong> 🕐 Última actualización:</strong> {ultimaActualizacion}
+          <strong> 🕐 Última actualización:</strong> {ultimaActualizacion} | 
+          <strong> 🌐 Frontend:</strong> <a href={window.location.origin} target="_blank" rel="noopener noreferrer" style={{ color: '#3b82f6', textDecoration: 'none' }}>{window.location.origin}</a>
         </p>
       </div>
 
@@ -217,20 +218,6 @@ function App() {
       </div>
 
 
-      <div style={{ marginTop: '16px', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
-        <h3 style={{ fontWeight: 'bold', marginBottom: '8px' }}>🔧 Información Técnica:</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', fontSize: '14px' }}>
-          <div>
-            <p><strong>🌐 Backend:</strong> {import.meta.env.VITE_API_URL || 'http://localhost:3001'}</p>
-            <p><strong>📱 Frontend:</strong> {window.location.origin}</p>
-          </div>
-          <div>
-            <p><strong>📊 Sensores:</strong> {sensores.length} del Ariete</p>
-            <p><strong>⚡ React:</strong> Versión simple sin dependencias</p>
-            <p><strong>🖼️ Imagen:</strong> {debugInfo || 'Procesando...'}</p>
-          </div>
-        </div>
-      </div>
       </div>
     </div>
   );
