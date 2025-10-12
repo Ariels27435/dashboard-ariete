@@ -168,15 +168,15 @@ function App() {
       <div className="dashboard-content">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
         <div>
-                <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#1f2937', margin: '0 0 4px 0' }}>Dashboard Ariete Hidráulico 🌿</h1>
-          <p style={{ fontSize: '14px', color: '#6b7280', margin: '0', fontStyle: 'italic' }}>
+                <h1 style={{ fontSize: '36px', fontWeight: '900', color: '#000000', margin: '0 0 8px 0', textShadow: '2px 2px 4px rgba(255,255,255,0.8)' }}>Dashboard Ariete Hidráulico 🌿</h1>
+          <p style={{ fontSize: '16px', color: '#000000', margin: '0', fontWeight: 'bold', textShadow: '1px 1px 2px rgba(255,255,255,0.8)' }}>
             Creado por Ariel Celico López de León ✨
           </p>
         </div>
       </div>
 
       {/* Espacio para mostrar más la imagen de fondo */}
-      <div style={{ height: '100px' }}></div>
+      <div style={{ height: '250px' }}></div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginBottom: '32px' }}>
         {sensores.map((sensor) => (
