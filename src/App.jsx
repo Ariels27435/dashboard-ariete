@@ -165,60 +165,55 @@ function App() {
       {/* Overlay semi-transparente para mejorar legibilidad */}
       <div className="dashboard-overlay"></div>
       {/* Contenido del dashboard */}
-      <div className="dashboard-content" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-        {/* Título en la parte superior */}
-        <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start', marginBottom: 'auto' }}>
-          <div>
-            <h1 style={{ fontSize: '36px', fontWeight: '900', color: '#000000', margin: '0', textShadow: '2px 2px 4px rgba(255,255,255,0.8)' }}>Dashboard Ariete Hidráulico 🌿</h1>
-          </div>
+      <div className="dashboard-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '20px' }}>
+        {/* Título centrado */}
+        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: '900', color: '#000000', margin: '0', textShadow: '2px 2px 4px rgba(255,255,255,0.8)' }}>Dashboard Ariete Hidráulico 🌿</h1>
         </div>
 
-        {/* Contenido en la parte inferior izquierda */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-          {/* Todos los sensores en línea horizontal */}
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
-            {sensores.map((sensor) => (
-              <div key={sensor.id} style={{ padding: '16px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', borderLeft: '4px solid #3b82f6', maxWidth: '400px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                  <div style={{ fontSize: '64px' }}>{sensor.icono}</div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '12px', color: '#6b7280' }}>Estado</div>
-                    <div style={{ fontSize: '12px', fontWeight: '600', color: '#059669' }}>✅ OK</div>
-                  </div>
+        {/* Todos los sensores en línea horizontal centrados */}
+        <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          {sensores.map((sensor) => (
+            <div key={sensor.id} style={{ padding: '16px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', borderLeft: '4px solid #3b82f6', maxWidth: '350px', minWidth: '300px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                <div style={{ fontSize: '48px' }}>{sensor.icono}</div>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '12px', color: '#6b7280' }}>Estado</div>
+                  <div style={{ fontSize: '12px', fontWeight: '600', color: '#059669' }}>✅ OK</div>
                 </div>
-                
-                <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: '#1f2937', marginBottom: '8px' }}>{sensor.nombre}</h2>
-                
-                <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#2563eb', marginBottom: '8px' }}>
-                  {sensor.valor} <span style={{ fontSize: '18px', color: '#6b7280' }}>{sensor.unidad}</span>
-                </div>
-                
-                {sensor.unidad === '%' && (
-                  <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '12px', marginBottom: '8px' }}>
-                    <div
-                      style={{ 
-                        height: '12px', 
-                        borderRadius: '9999px', 
-                        backgroundColor: '#3b82f6', 
-                        transition: 'width 0.3s ease',
-                        width: `${Math.min(sensor.valor, 100)}%` 
-                      }}
-                    ></div>
-                  </div>
-                )}
               </div>
-            ))}
-          </div>
+              
+              <h2 style={{ fontSize: '18px', fontWeight: 'bold', color: '#1f2937', marginBottom: '8px' }}>{sensor.nombre}</h2>
+              
+              <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#2563eb', marginBottom: '8px' }}>
+                {sensor.valor} <span style={{ fontSize: '16px', color: '#6b7280' }}>{sensor.unidad}</span>
+              </div>
+              
+              {sensor.unidad === '%' && (
+                <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '10px', marginBottom: '8px' }}>
+                  <div
+                    style={{ 
+                      height: '10px', 
+                      borderRadius: '9999px', 
+                      backgroundColor: '#3b82f6', 
+                      transition: 'width 0.3s ease',
+                      width: `${Math.min(sensor.valor, 100)}%` 
+                    }}
+                  ></div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
 
-          {/* Barra de información al final */}
-          <div style={{ padding: '12px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-            <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>
-              <strong>📊 Sensores Ariete:</strong> {sensores.length} | 
-              <strong> 🕐 Última actualización:</strong> {ultimaActualizacion} | 
-              <strong> 🌐 Frontend:</strong> <a href={window.location.origin} target="_blank" rel="noopener noreferrer" style={{ color: '#3b82f6', textDecoration: 'none' }}>{window.location.origin}</a> |
-              <strong> ✍️ Autor:</strong> Ariel Celico Lopez de Leon
-            </p>
-          </div>
+        {/* Barra de información centrada */}
+        <div style={{ padding: '12px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', maxWidth: '100%' }}>
+          <p style={{ fontSize: '14px', color: '#6b7280', margin: 0, textAlign: 'center' }}>
+            <strong>📊 Sensores Ariete:</strong> {sensores.length} | 
+            <strong> 🕐 Última actualización:</strong> {ultimaActualizacion} | 
+            <strong> 🌐 Frontend:</strong> <a href={window.location.origin} target="_blank" rel="noopener noreferrer" style={{ color: '#3b82f6', textDecoration: 'none' }}>{window.location.origin}</a> |
+            <strong> ✍️ Autor:</strong> Ariel Celico Lopez de Leon
+          </p>
         </div>
 
       </div>
