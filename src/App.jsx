@@ -168,36 +168,10 @@ function App() {
       <div className="dashboard-content">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
         <div>
-                <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#1f2937', margin: '0 0 4px 0' }}>Dashboard Ariete - CON IMAGEN DE FONDO 🎨🖼️✨</h1>
+                <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#1f2937', margin: '0 0 4px 0' }}>Dashboard Ariete Hidráulico 🌿</h1>
           <p style={{ fontSize: '14px', color: '#6b7280', margin: '0', fontStyle: 'italic' }}>
             Creado por Ariel Celico López de León ✨
           </p>
-        </div>
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <button
-            onClick={obtenerDatosBackend}
-            style={{ padding: '8px 16px', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-          >
-            🔄 Recargar
-          </button>
-          <button
-            onClick={datosAleatorios}
-            style={{ padding: '8px 16px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-          >
-            📤 Datos Aleatorios
-          </button>
-      <button
-            onClick={simularDatosESP32}
-            style={{ padding: '8px 16px', backgroundColor: '#8b5cf6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-      >
-            🎮 Simular ESP32
-      </button>
-          <button
-            onClick={probarImagen}
-            style={{ padding: '8px 16px', backgroundColor: '#f59e0b', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-          >
-            🔍 Probar Imagen
-          </button>
         </div>
       </div>
 
