@@ -175,13 +175,8 @@ function App() {
         </div>
       </div>
 
-      <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-        <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>
-          <strong>📊 Sensores Ariete:</strong> {sensores.length} | 
-          <strong> 🕐 Última actualización:</strong> {ultimaActualizacion} | 
-          <strong> 🌐 Frontend:</strong> <a href={window.location.origin} target="_blank" rel="noopener noreferrer" style={{ color: '#3b82f6', textDecoration: 'none' }}>{window.location.origin}</a>
-        </p>
-      </div>
+      {/* Espacio para mostrar más la imagen de fondo */}
+      <div style={{ height: '100px' }}></div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginBottom: '32px' }}>
         {sensores.map((sensor) => (
@@ -217,6 +212,14 @@ function App() {
         ))}
       </div>
 
+      {/* Barra de información al final */}
+      <div style={{ marginTop: '40px', padding: '12px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+        <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>
+          <strong>📊 Sensores Ariete:</strong> {sensores.length} | 
+          <strong> 🕐 Última actualización:</strong> {ultimaActualizacion} | 
+          <strong> 🌐 Frontend:</strong> <a href={window.location.origin} target="_blank" rel="noopener noreferrer" style={{ color: '#3b82f6', textDecoration: 'none' }}>{window.location.origin}</a>
+        </p>
+      </div>
 
       </div>
     </div>
