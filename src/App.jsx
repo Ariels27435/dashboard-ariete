@@ -168,18 +168,52 @@ function App() {
       <div className="dashboard-content">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
         <div>
-                <h1 style={{ fontSize: '36px', fontWeight: '900', color: '#000000', margin: '0 0 8px 0', textShadow: '2px 2px 4px rgba(255,255,255,0.8)' }}>Dashboard Ariete Hidráulico 🌿</h1>
-          <p style={{ fontSize: '16px', color: '#000000', margin: '0', fontWeight: 'bold', textShadow: '1px 1px 2px rgba(255,255,255,0.8)' }}>
+                <h1 style={{ fontSize: '36px', fontWeight: '900', color: '#000000', margin: '0 0 2px 0', textShadow: '2px 2px 4px rgba(255,255,255,0.8)' }}>Dashboard Ariete Hidráulico 🌿</h1>
+          <p style={{ fontSize: '16px', color: '#000000', margin: '0 0 20px 0', fontWeight: 'bold', textShadow: '1px 1px 2px rgba(255,255,255,0.8)' }}>
             Creado por Ariel Celico López de León ✨
           </p>
         </div>
       </div>
 
-      {/* Espacio para mostrar más la imagen de fondo */}
-      <div style={{ height: '250px' }}></div>
+      {/* Sensor de humedad justo debajo del creador */}
+      {sensores.filter(sensor => sensor.id === 'humedad').map((sensor) => (
+        <div key={sensor.id} style={{ padding: '24px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', borderLeft: '4px solid #3b82f6', marginBottom: '24px', maxWidth: '400px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <div style={{ fontSize: '64px' }}>{sensor.icono}</div>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontSize: '12px', color: '#6b7280' }}>Estado</div>
+              <div style={{ fontSize: '12px', fontWeight: '600', color: '#059669' }}>✅ OK</div>
+            </div>
+          </div>
+          
+          <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: '#1f2937', marginBottom: '8px' }}>{sensor.nombre}</h2>
+          
+          <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#2563eb', marginBottom: '8px' }}>
+            {sensor.valor} <span style={{ fontSize: '18px', color: '#6b7280' }}>{sensor.unidad}</span>
+          </div>
+          
+          {sensor.unidad === '%' && (
+            <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '12px', marginBottom: '8px' }}>
+              <div
+                style={{ 
+                  height: '12px', 
+                  borderRadius: '9999px', 
+                  backgroundColor: '#3b82f6', 
+                  transition: 'width 0.3s ease',
+                  width: `${Math.min(sensor.valor, 100)}%` 
+                }}
+              ></div>
+            </div>
+          )}
+        </div>
+      ))}
 
+      {/* Espacio para mostrar más la imagen de fondo */}
+      <div style={{ height: '100px' }}></div>
+
+      {/* Los otros dos sensores en grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginBottom: '32px' }}>
-        {sensores.map((sensor) => (
+        {sensores.filter(sensor => sensor.id !== 'humedad').map((sensor) => (
           <div key={sensor.id} style={{ padding: '24px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', borderLeft: '4px solid #3b82f6' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
               <div style={{ fontSize: '64px' }}>{sensor.icono}</div>
