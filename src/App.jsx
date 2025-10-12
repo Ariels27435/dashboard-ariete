@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import './App.css';
 
 function App() {
   const [sensores, setSensores] = useState([
@@ -26,6 +27,7 @@ function App() {
   ]);
 
   const [ultimaActualizacion, setUltimaActualizacion] = useState(new Date().toLocaleTimeString());
+  const [debugInfo, setDebugInfo] = useState('');
 
   // Función para obtener datos del backend
   const obtenerDatosBackend = async () => {
@@ -83,10 +85,25 @@ function App() {
     }
   };
 
+  // Función para probar la carga de la imagen
+  const probarImagen = () => {
+    const img = new Image();
+    img.onload = () => {
+      setDebugInfo('✅ Imagen cargada correctamente');
+      console.log('✅ Imagen de fondo cargada:', img.src);
+    };
+    img.onerror = () => {
+      setDebugInfo('❌ Error al cargar la imagen');
+      console.error('❌ Error al cargar la imagen de fondo');
+    };
+    img.src = '/background-image.jpeg';
+  };
+
   // Actualizar datos cada 3 segundos
   useEffect(() => {
     const interval = setInterval(obtenerDatosBackend, 3000);
     obtenerDatosBackend(); // Cargar datos inmediatamente
+    probarImagen(); // Probar carga de imagen
 
     return () => clearInterval(interval);
   }, []);
@@ -135,7 +152,20 @@ function App() {
   };
 
   return (
-    <div style={{ padding: '24px', backgroundColor: '#f3f4f6', minHeight: '100vh' }}>
+    <div 
+      className="dashboard-container"
+      style={{
+        backgroundImage: 'url(/background-image.jpeg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed'
+      }}
+    >
+      {/* Overlay semi-transparente para mejorar legibilidad */}
+      <div className="dashboard-overlay"></div>
+      {/* Contenido del dashboard */}
+      <div className="dashboard-content">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
         <div>
           <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#1f2937', margin: '0 0 4px 0' }}>Dashboard Ariete - FUNCIONAL</h1>
@@ -162,6 +192,12 @@ function App() {
       >
             🎮 Simular ESP32
       </button>
+          <button
+            onClick={probarImagen}
+            style={{ padding: '8px 16px', backgroundColor: '#f59e0b', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+          >
+            🔍 Probar Imagen
+          </button>
         </div>
       </div>
 
@@ -225,8 +261,10 @@ function App() {
           <div>
             <p><strong>📊 Sensores:</strong> {sensores.length} del Ariete</p>
             <p><strong>⚡ React:</strong> Versión simple sin dependencias</p>
+            <p><strong>🖼️ Imagen:</strong> {debugInfo || 'Procesando...'}</p>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
