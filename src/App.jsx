@@ -165,7 +165,7 @@ function App() {
       {/* Overlay semi-transparente para mejorar legibilidad */}
       <div className="dashboard-overlay"></div>
       {/* Contenido del dashboard */}
-      <div className="dashboard-content" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <div className="dashboard-content" style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
         {/* Título arriba como estaba originalmente */}
         <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start', marginBottom: 'auto', paddingTop: '20px' }}>
           <div>
