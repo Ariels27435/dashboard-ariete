@@ -166,7 +166,7 @@ function App() {
       <div className="dashboard-overlay"></div>
       {/* Contenido del dashboard */}
       <div className="dashboard-content">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
         <div>
                 <h1 style={{ fontSize: '36px', fontWeight: '900', color: '#000000', margin: '0 0 2px 0', textShadow: '2px 2px 4px rgba(255,255,255,0.8)' }}>Dashboard Ariete Hidráulico 🌿</h1>
           <p style={{ fontSize: '16px', color: '#000000', margin: '0 0 10px 0', fontWeight: 'bold', textShadow: '1px 1px 2px rgba(255,255,255,0.8)' }}>
@@ -177,7 +177,7 @@ function App() {
 
       {/* Sensor de humedad justo debajo del creador */}
       {sensores.filter(sensor => sensor.id === 'humedad').map((sensor) => (
-        <div key={sensor.id} style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', borderLeft: '4px solid #3b82f6', marginBottom: '16px', maxWidth: '400px' }}>
+        <div key={sensor.id} style={{ padding: '16px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', borderLeft: '4px solid #3b82f6', marginBottom: '8px', maxWidth: '400px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
             <div style={{ fontSize: '64px' }}>{sensor.icono}</div>
             <div style={{ textAlign: 'right' }}>
@@ -209,10 +209,10 @@ function App() {
       ))}
 
 
-      {/* Los otros dos sensores en grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+      {/* Los otros dos sensores en línea horizontal */}
+      <div style={{ display: 'flex', gap: '16px', marginBottom: '8px', justifyContent: 'center' }}>
         {sensores.filter(sensor => sensor.id !== 'humedad').map((sensor) => (
-          <div key={sensor.id} style={{ padding: '24px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', borderLeft: '4px solid #3b82f6' }}>
+          <div key={sensor.id} style={{ padding: '16px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', borderLeft: '4px solid #3b82f6', maxWidth: '400px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
               <div style={{ fontSize: '64px' }}>{sensor.icono}</div>
               <div style={{ textAlign: 'right' }}>
