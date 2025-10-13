@@ -233,6 +233,34 @@ function App() {
               <strong> 🌐 Frontend:</strong> <a href={window.location.origin} target="_blank" rel="noopener noreferrer" style={{ color: '#3b82f6', textDecoration: 'none' }}>{window.location.origin}</a> |
               <strong> ✍️ Autor:</strong> Ariel Celico López de León
             </p>
+            <div style={{ textAlign: 'center', marginTop: '8px' }}>
+              <a 
+                href="https://es.wikipedia.org/wiki/Bomba_de_ariete" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{ 
+                  display: 'inline-block',
+                  padding: '6px 12px',
+                  backgroundColor: '#3b82f6',
+                  color: 'white',
+                  textDecoration: 'none',
+                  borderRadius: '6px',
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = '#1d4ed8';
+                  e.target.style.transform = 'scale(1.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = '#3b82f6';
+                  e.target.style.transform = 'scale(1)';
+                }}
+              >
+                📚 ¿Qué es un Ariete Hidráulico?
+              </a>
+            </div>
           </div>
         </div>
 
