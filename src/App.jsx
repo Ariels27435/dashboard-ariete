@@ -202,20 +202,20 @@ function App() {
                 
                 <h2 style={{ fontSize: '17px', fontWeight: '600', color: '#1d1d1f', marginBottom: '12px', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif', letterSpacing: '-0.022em' }}>{sensor.nombre}</h2>
                 
-                <div style={{ fontSize: '36px', fontWeight: '700', color: '#1d1d1f', marginBottom: '12px', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif', letterSpacing: '-0.022em' }}>
+                <div style={{ fontSize: '36px', fontWeight: '700', background: 'linear-gradient(135deg, #ff6b35 0%, #007aff 50%, #5856d6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', marginBottom: '12px', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif', letterSpacing: '-0.022em' }}>
                   {sensor.valor} <span style={{ fontSize: '20px', fontWeight: '500', color: '#86868b' }}>{sensor.unidad}</span>
                 </div>
                 
                 {sensor.unidad === '%' && (
-                  <div style={{ width: '100%', backgroundColor: '#f5f5f7', borderRadius: '8px', height: '8px', marginBottom: '8px', overflow: 'hidden' }}>
+                  <div style={{ width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.1)', borderRadius: '8px', height: '8px', marginBottom: '8px', overflow: 'hidden' }}>
                     <div
                       style={{ 
                         height: '8px', 
                         borderRadius: '8px', 
-                        backgroundColor: '#007aff', 
+                        background: 'linear-gradient(90deg, #ff6b35 0%, #ff3b30 25%, #007aff 50%, #5856d6 75%, #af52de 100%)',
                         transition: 'width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                         width: `${Math.min(sensor.valor, 100)}%`,
-                        boxShadow: '0 1px 3px rgba(0, 122, 255, 0.3)'
+                        boxShadow: '0 2px 8px rgba(255, 107, 53, 0.4), 0 0 12px rgba(0, 122, 255, 0.3)'
                       }}
                     ></div>
                   </div>
@@ -241,22 +241,24 @@ function App() {
                 rel="noopener noreferrer"
                 style={{ 
                   display: 'inline-block',
-                  padding: '6px 12px',
-                  backgroundColor: '#1e40af',
+                  padding: '8px 16px',
+                  background: 'linear-gradient(135deg, #ff6b35 0%, #007aff 50%, #5856d6 100%)',
                   color: 'white',
                   textDecoration: 'none',
-                  borderRadius: '6px',
-                  fontSize: '12px',
+                  borderRadius: '12px',
+                  fontSize: '13px',
                   fontWeight: '600',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 12px rgba(255, 107, 53, 0.3), 0 2px 6px rgba(0, 122, 255, 0.2)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = '#1e3a8a';
-                  e.target.style.transform = 'scale(1.05)';
+                  e.target.style.transform = 'scale(1.05) translateY(-2px)';
+                  e.target.style.boxShadow = '0 8px 20px rgba(255, 107, 53, 0.4), 0 4px 12px rgba(0, 122, 255, 0.3)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = '#1e40af';
-                  e.target.style.transform = 'scale(1)';
+                  e.target.style.transform = 'scale(1) translateY(0px)';
+                  e.target.style.boxShadow = '0 4px 12px rgba(255, 107, 53, 0.3), 0 2px 6px rgba(0, 122, 255, 0.2)';
                 }}
               >
                 📚 ¿Qué es un Ariete Hidráulico?
