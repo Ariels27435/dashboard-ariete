@@ -10,13 +10,13 @@ function App() {
         unidad: '%',
         icono: '🌧️'
       },
-      {
-        id: 'flujo',
-        nombre: 'Sensor Flujo Ariete',
-        valor: 0,
-        unidad: 'L/min',
+    {
+      id: 'flujo',
+      nombre: 'Sensor Flujo Ariete',
+      valor: 0,
+      unidad: 'L/min',
         icono: '💦'
-      },
+    },
     {
       id: 'nivel',
       nombre: 'Sensor Nivel Ariete',
@@ -258,7 +258,7 @@ function App() {
       <div className="dashboard-content" style={{ display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'flex-start', padding: '20px' }}>
         {/* Título arriba */}
         <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start', marginBottom: 'auto' }}>
-          <div>
+        <div>
             <h1 style={{ fontSize: '24px', fontWeight: '500', color: '#ffffff', margin: '0', textShadow: '0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.4)', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif', letterSpacing: '0.5px', lineHeight: '1.2', fontStyle: 'normal' }}>DASHBOARD ARIETE INTELIGENTE CON MICROSERVICIOS E IOT (INTERNET DE LAS COSAS) 🌿</h1>
           </div>
         </div>
@@ -290,7 +290,7 @@ function App() {
                 >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
                   <div style={{ fontSize: '48px' }}>{sensor.icono}</div>
-                  <button
+          <button
                     onClick={() => toggleHistorial(sensor.id)}
                     style={{
                       background: 'linear-gradient(135deg, #ff6b35 0%, #007aff 50%, #5856d6 100%)',
@@ -314,29 +314,29 @@ function App() {
                     }}
                   >
                     📊 Historial
-                  </button>
-                </div>
-                
+      </button>
+      </div>
+
                 <h2 style={{ fontSize: '17px', fontWeight: '600', color: '#1d1d1f', marginBottom: '12px', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif', letterSpacing: '-0.022em' }}>{sensor.nombre}</h2>
                 
                 <div style={{ fontSize: '36px', fontWeight: '700', background: 'linear-gradient(135deg, #ff6b35 0%, #007aff 50%, #5856d6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', marginBottom: '12px', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif', letterSpacing: '-0.022em' }}>
                   {sensor.valor} <span style={{ fontSize: '20px', fontWeight: '500', color: '#86868b' }}>{sensor.unidad}</span>
-                </div>
-                
-                {sensor.unidad === '%' && (
+            </div>
+            
+            {sensor.unidad === '%' && (
                   <div style={{ width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.1)', borderRadius: '8px', height: '8px', marginBottom: '8px', overflow: 'hidden' }}>
-                    <div
-                      style={{ 
+                <div
+                  style={{ 
                         height: '8px', 
                         borderRadius: '8px', 
                         background: 'linear-gradient(90deg, #ff6b35 0%, #ff3b30 25%, #007aff 50%, #5856d6 75%, #af52de 100%)',
                         transition: 'width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                         width: `${Math.min(sensor.valor, 100)}%`,
                         boxShadow: '0 2px 8px rgba(255, 107, 53, 0.4), 0 0 12px rgba(0, 122, 255, 0.3)'
-                      }}
-                    ></div>
-                  </div>
-                )}
+                  }}
+                ></div>
+              </div>
+            )}
 
                 {/* Panel de historial desplegable */}
                 {historialVisible[sensor.id] && (
@@ -420,9 +420,9 @@ function App() {
                           }}>
                             {dato.hora}
                           </div>
-                        </div>
-                      ))}
-                    </div>
+          </div>
+        ))}
+      </div>
                     <div style={{
                       marginTop: '12px',
                       textAlign: 'center',
@@ -431,8 +431,8 @@ function App() {
                       fontStyle: 'italic'
                     }}>
                       📊 Datos reales del ESP32 - Mostrando últimas 12 lecturas
-                    </div>
-                  </div>
+        </div>
+      </div>
                 )}
               </div>
             ))}
