@@ -39,3 +39,11 @@
   z-index: -2;
   opacity: 1.0;
 }
+
+/* Efecto hover para las tarjetas de sensores */
+.sensor-card:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3) !important;
+  border-left: 6px solid #1d4ed8 !important;
+  background-color: rgba(248, 250, 252, 0.9) !important;
+}
