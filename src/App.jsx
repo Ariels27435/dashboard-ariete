@@ -104,15 +104,12 @@ function App() {
   // Función simplificada para obtener el valor actual del ESP32
   const obtenerValorActual = async (sensorId) => {
     try {
-      console.log(`🔄 Obteniendo valor actual para ${sensorId}...`);
-      
       const API_URL = import.meta.env.VITE_API_URL || 'https://backend-ariete.onrender.com';
       
       // Obtener datos actuales del ESP32
       const response = await fetch(`${API_URL}/api/esp32/sensores?api_key=ariete-esp32-2025`);
       
       if (!response.ok) {
-        console.log(`❌ Error obteniendo datos:`, response.status);
         return {
           hora: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
           valor: 'Sin conexión',
@@ -121,7 +118,6 @@ function App() {
       }
       
       const data = await response.json();
-      console.log(`✅ Datos recibidos:`, data);
       
       if (!data.sensores || data.sensores.length === 0) {
         return {
@@ -144,15 +140,12 @@ function App() {
       const sensorData = data.sensores.find(s => s.tipo === sensorType);
       
       if (!sensorData || !sensorData.ultimaLectura) {
-        console.log(`⚠️ No se encontró sensor o lectura para ${sensorType}`);
         return {
           hora: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
           valor: 'Sin datos',
           fecha: new Date().toLocaleDateString('es-ES')
         };
       }
-      
-      console.log(`✅ Valor actual encontrado para ${sensorId}:`, sensorData.ultimaLectura);
       
       return {
         hora: new Date(sensorData.ultimaLectura.timestamp).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
@@ -161,7 +154,6 @@ function App() {
       };
       
     } catch (error) {
-      console.error(`❌ Error al obtener valor actual para ${sensorId}:`, error);
       return {
         hora: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
         valor: 'Error',
@@ -201,39 +193,34 @@ function App() {
 
   // Función para mostrar/ocultar historial
   const toggleHistorial = async (sensorId) => {
-    console.log(`🔄 Toggle historial para ${sensorId}. Estado actual:`, historialVisible);
-    
-    // Si este sensor ya está abierto, cerrarlo
-    if (historialVisible[sensorId]) {
-      setHistorialVisible(prev => ({
-        ...prev,
-        [sensorId]: false
-      }));
-      console.log(`✅ Historial cerrado para ${sensorId}`);
-      return;
+    try {
+      console.log(`🔄 Toggle historial para ${sensorId}`);
+      
+      // Si este sensor ya está abierto, cerrarlo
+      if (historialVisible[sensorId]) {
+        setHistorialVisible({});
+        return;
+      }
+      
+      // Cerrar todos los otros historiales
+      setHistorialVisible({});
+      
+      // Obtener valor actual del ESP32
+      const valorActual = await obtenerValorActual(sensorId);
+      
+      // Crear un array con el valor actual
+      const historial = [valorActual];
+      
+      setHistorialDatos(prev => ({ ...prev, [sensorId]: historial }));
+      
+      // Abrir este historial
+      setHistorialVisible({ [sensorId]: true });
+      
+      console.log(`✅ Historial abierto para ${sensorId}`);
+    } catch (error) {
+      console.error(`❌ Error en toggleHistorial:`, error);
+      setHistorialVisible({});
     }
-    
-    // Cerrar todos los otros historiales primero
-    setHistorialVisible({});
-    
-    // Obtener valor actual del ESP32
-    console.log(`🔄 Obteniendo valor actual para ${sensorId}...`);
-    const valorActual = await obtenerValorActual(sensorId);
-    
-    // Crear un array con el valor actual
-    const historial = [valorActual];
-    
-    setHistorialDatos(prev => ({ ...prev, [sensorId]: historial }));
-    
-    // Abrir este historial después de un pequeño delay
-    setTimeout(() => {
-      setHistorialVisible(prev => ({
-        ...prev,
-        [sensorId]: true
-      }));
-      console.log(`✅ Historial abierto para ${sensorId} con valor:`, valorActual);
-      console.log(`🔍 Estado final historialVisible:`, { [sensorId]: true });
-    }, 100);
   };
 
   // Actualizar datos cada 3 segundos
@@ -386,7 +373,6 @@ function App() {
             )}
 
                 {/* Panel de historial desplegable */}
-                {console.log(`🔍 Renderizando sensor ${sensor.id}, historialVisible:`, historialVisible[sensor.id])}
                 {historialVisible[sensor.id] && (
                   <div style={{
                     marginTop: '12px',
