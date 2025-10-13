@@ -213,7 +213,7 @@ function App() {
       return;
     }
     
-    // Cerrar todos los otros historiales
+    // Cerrar todos los otros historiales primero
     setHistorialVisible({});
     
     // Obtener valor actual del ESP32
@@ -225,13 +225,15 @@ function App() {
     
     setHistorialDatos(prev => ({ ...prev, [sensorId]: historial }));
     
-    // Abrir este historial
-    setHistorialVisible(prev => ({
-      ...prev,
-      [sensorId]: true
-    }));
-    
-    console.log(`✅ Historial abierto para ${sensorId} con valor:`, valorActual);
+    // Abrir este historial después de un pequeño delay
+    setTimeout(() => {
+      setHistorialVisible(prev => ({
+        ...prev,
+        [sensorId]: true
+      }));
+      console.log(`✅ Historial abierto para ${sensorId} con valor:`, valorActual);
+      console.log(`🔍 Estado final historialVisible:`, { [sensorId]: true });
+    }, 100);
   };
 
   // Actualizar datos cada 3 segundos
@@ -384,6 +386,7 @@ function App() {
             )}
 
                 {/* Panel de historial desplegable */}
+                {console.log(`🔍 Renderizando sensor ${sensor.id}, historialVisible:`, historialVisible[sensor.id])}
                 {historialVisible[sensor.id] && (
                   <div style={{
                     marginTop: '12px',
