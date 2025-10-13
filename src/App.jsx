@@ -183,7 +183,7 @@ function App() {
                 className="sensor-card"
                 style={{ 
                   padding: '15px', 
-                  backgroundColor: 'rgba(255, 255, 255, 0.3)', 
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)', 
                   borderRadius: '10px', 
                   boxShadow: '0 4px 8px rgba(0,0,0,0.15)', 
                   borderLeft: '4px solid #3b82f6', 
@@ -192,8 +192,8 @@ function App() {
                   transition: 'all 0.3s ease',
                   cursor: 'pointer',
                   transform: 'scale(1)',
-                  backdropFilter: 'blur(2px)',
-                  WebkitBackdropFilter: 'blur(2px)'
+                  backdropFilter: 'blur(1px)',
+                  WebkitBackdropFilter: 'blur(1px)'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
