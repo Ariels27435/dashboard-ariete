@@ -191,8 +191,8 @@ function App() {
     return historial;
   };
 
-  // Función simple para mostrar/ocultar historial
-  const toggleHistorial = (sensorId) => {
+  // Función para mostrar/ocultar historial con datos reales
+  const toggleHistorial = async (sensorId) => {
     // Si este sensor ya está abierto, cerrarlo
     if (historialVisible[sensorId]) {
       setHistorialVisible({});
@@ -202,15 +202,62 @@ function App() {
     // Cerrar todos los otros historiales
     setHistorialVisible({});
     
-    // Crear datos de ejemplo simples
-    const ahora = new Date();
-    const valorActual = {
-      hora: ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
-      valor: 'Dato Real ESP32',
-      fecha: ahora.toLocaleDateString('es-ES')
-    };
-    
-    setHistorialDatos(prev => ({ ...prev, [sensorId]: [valorActual] }));
+    try {
+      // Obtener datos reales del ESP32
+      const API_URL = import.meta.env.VITE_API_URL || 'https://backend-ariete.onrender.com';
+      const response = await fetch(`${API_URL}/api/esp32/sensores?api_key=ariete-esp32-2025`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Mapear tipos de sensores
+        const sensorTypeMap = {
+          'humedad': 'humedad',
+          'flujo': 'caudal',
+          'nivel': 'nivel'
+        };
+        
+        const sensorType = sensorTypeMap[sensorId];
+        const sensorData = data.sensores?.find(s => s.tipo === sensorType);
+        
+        if (sensorData && sensorData.ultimaLectura) {
+          const valorActual = {
+            hora: new Date(sensorData.ultimaLectura.timestamp).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+            valor: sensorData.ultimaLectura.valor,
+            fecha: new Date(sensorData.ultimaLectura.timestamp).toLocaleDateString('es-ES')
+          };
+          
+          setHistorialDatos(prev => ({ ...prev, [sensorId]: [valorActual] }));
+        } else {
+          // Si no hay datos reales, mostrar mensaje
+          const valorActual = {
+            hora: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+            valor: 'Sin datos del ESP32',
+            fecha: new Date().toLocaleDateString('es-ES')
+          };
+          
+          setHistorialDatos(prev => ({ ...prev, [sensorId]: [valorActual] }));
+        }
+      } else {
+        // Error de conexión
+        const valorActual = {
+          hora: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+          valor: 'Error de conexión',
+          fecha: new Date().toLocaleDateString('es-ES')
+        };
+        
+        setHistorialDatos(prev => ({ ...prev, [sensorId]: [valorActual] }));
+      }
+    } catch (error) {
+      // Error general
+      const valorActual = {
+        hora: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+        valor: 'Error al obtener datos',
+        fecha: new Date().toLocaleDateString('es-ES')
+      };
+      
+      setHistorialDatos(prev => ({ ...prev, [sensorId]: [valorActual] }));
+    }
     
     // Abrir este historial
     setHistorialVisible({ [sensorId]: true });
@@ -417,36 +464,72 @@ function App() {
                         ✕ Cerrar
                       </button>
                     </div>
-                    <div style={{
-                      textAlign: 'center',
-                      padding: '20px',
-                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                      borderRadius: '12px',
-                      border: '2px solid rgba(0, 122, 255, 0.3)',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-                    }}>
-                      <div style={{ 
-                        fontSize: '24px', 
-                        fontWeight: '700',
-                        color: '#1d1d1f',
-                        marginBottom: '8px'
+                    {historialDatos[sensor.id] && historialDatos[sensor.id].length > 0 ? (
+                      <div style={{
+                        textAlign: 'center',
+                        padding: '20px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        borderRadius: '12px',
+                        border: '2px solid rgba(0, 122, 255, 0.3)',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
                       }}>
-                        📊 Historial Funcionando
+                        <div style={{ 
+                          fontSize: '24px', 
+                          fontWeight: '700',
+                          color: '#1d1d1f',
+                          marginBottom: '8px'
+                        }}>
+                          {historialDatos[sensor.id][0].valor}
+                          {!historialDatos[sensor.id][0].valor.includes('Error') && 
+                           !historialDatos[sensor.id][0].valor.includes('Sin') ? 
+                           ` ${sensor.unidad}` : ''}
+                        </div>
+                        <div style={{ 
+                          fontSize: '14px', 
+                          color: '#86868b',
+                          marginBottom: '4px'
+                        }}>
+                          📅 {historialDatos[sensor.id][0].fecha}
+                        </div>
+                        <div style={{ 
+                          fontSize: '12px', 
+                          color: '#86868b'
+                        }}>
+                          🕐 {historialDatos[sensor.id][0].hora}
+                        </div>
                       </div>
-                      <div style={{ 
-                        fontSize: '14px', 
-                        color: '#86868b',
-                        marginBottom: '4px'
+                    ) : (
+                      <div style={{
+                        textAlign: 'center',
+                        padding: '20px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        borderRadius: '12px',
+                        border: '2px solid rgba(255, 107, 53, 0.3)',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
                       }}>
-                        📅 {new Date().toLocaleDateString('es-ES')}
+                        <div style={{ 
+                          fontSize: '24px', 
+                          fontWeight: '700',
+                          color: '#1d1d1f',
+                          marginBottom: '8px'
+                        }}>
+                          📡 Cargando...
+                        </div>
+                        <div style={{ 
+                          fontSize: '14px', 
+                          color: '#86868b',
+                          marginBottom: '4px'
+                        }}>
+                          📅 Obteniendo datos del ESP32
+                        </div>
+                        <div style={{ 
+                          fontSize: '12px', 
+                          color: '#86868b'
+                        }}>
+                          🕐 {new Date().toLocaleTimeString('es-ES')}
+                        </div>
                       </div>
-                      <div style={{ 
-                        fontSize: '12px', 
-                        color: '#86868b'
-                      }}>
-                        🕐 {new Date().toLocaleTimeString('es-ES')}
-                      </div>
-                    </div>
+                    )}
       </div>
                 )}
               </div>
