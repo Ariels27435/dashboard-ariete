@@ -178,7 +178,38 @@ function App() {
           {/* Todos los sensores en línea horizontal centrados */}
           <div style={{ display: 'flex', gap: '15px', marginBottom: '5px', justifyContent: 'center', flexWrap: 'wrap' }}>
             {sensores.map((sensor) => (
-              <div key={sensor.id} style={{ padding: '15px', backgroundColor: 'white', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.15)', borderLeft: '4px solid #3b82f6', width: '320px', minHeight: '200px' }}>
+              <div 
+                key={sensor.id} 
+                style={{ 
+                  padding: '15px', 
+                  backgroundColor: 'white', 
+                  borderRadius: '10px', 
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.15)', 
+                  borderLeft: '4px solid #3b82f6', 
+                  width: '320px', 
+                  minHeight: '200px',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                  transform: 'scale(1)',
+                  ':hover': {
+                    transform: 'scale(1.05)',
+                    boxShadow: '0 8px 20px rgba(59, 130, 246, 0.3)',
+                    borderLeft: '6px solid #1d4ed8'
+                  }
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'scale(1.05)';
+                  e.target.style.boxShadow = '0 8px 20px rgba(59, 130, 246, 0.3)';
+                  e.target.style.borderLeft = '6px solid #1d4ed8';
+                  e.target.style.backgroundColor = '#f8fafc';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'scale(1)';
+                  e.target.style.boxShadow = '0 4px 8px rgba(0,0,0,0.15)';
+                  e.target.style.borderLeft = '4px solid #3b82f6';
+                  e.target.style.backgroundColor = 'white';
+                }}
+              >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
                   <div style={{ fontSize: '48px' }}>{sensor.icono}</div>
                   <div style={{ textAlign: 'right' }}>
