@@ -15,7 +15,7 @@ function App() {
         nombre: 'Sensor Flujo Ariete',
         valor: 0,
         unidad: 'L/min',
-        icono: '🌊'
+        icono: '🚿'
       },
     {
       id: 'nivel',
@@ -61,7 +61,7 @@ function App() {
                 nombre: 'Sensor Flujo Ariete',
                 valor: sensoresAriete.find(s => s.tipo === 'caudal')?.ultimaLectura?.valor || 0,
                 unidad: 'L/min',
-                icono: '🌊'
+                icono: '🚿'
               },
               {
                 id: 'nivel',
@@ -124,7 +124,7 @@ function App() {
         nombre: 'Sensor Flujo Ariete',
         valor: 0.00,
         unidad: 'L/min',
-        icono: '🌊'
+        icono: '🚿'
       },
       {
         id: 'nivel',
@@ -169,7 +169,7 @@ function App() {
         {/* Título arriba */}
         <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start', marginBottom: 'auto' }}>
           <div>
-            <h1 style={{ fontSize: '24px', fontWeight: '900', color: '#ffffff', margin: '0', textShadow: '3px 3px 6px rgba(0,0,0,0.8)', fontFamily: 'Times New Roman, serif', letterSpacing: '1px', lineHeight: '1.2' }}>DASHBOARD ARIETE INTELIGENTE CON MICROSERVICIOS E IOT (INTERNET DE LAS COSAS) 🌿</h1>
+            <h1 style={{ fontSize: '24px', fontWeight: '900', color: '#ffffff', margin: '0', textShadow: '3px 3px 6px rgba(0,0,0,0.8)', fontFamily: 'Times New Roman, serif', letterSpacing: '1px', lineHeight: '1.2', fontStyle: 'italic' }}>DASHBOARD ARIETE INTELIGENTE CON MICROSERVICIOS E IOT (INTERNET DE LAS COSAS) 🌿</h1>
           </div>
         </div>
 
@@ -186,7 +186,7 @@ function App() {
                   backgroundColor: 'rgba(255, 255, 255, 0.1)', 
                   borderRadius: '10px', 
                   boxShadow: '0 4px 8px rgba(0,0,0,0.15)', 
-                  borderLeft: '4px solid #3b82f6', 
+                  borderLeft: '4px solid #1e40af', 
                   width: '320px', 
                   minHeight: '200px',
                   transition: 'all 0.3s ease',
@@ -202,7 +202,7 @@ function App() {
                 
                 <h2 style={{ fontSize: '18px', fontWeight: 'bold', color: '#1f2937', marginBottom: '8px' }}>{sensor.nombre}</h2>
                 
-                <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#2563eb', marginBottom: '8px' }}>
+                <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#1e40af', marginBottom: '8px' }}>
                   {sensor.valor} <span style={{ fontSize: '18px', color: '#6b7280' }}>{sensor.unidad}</span>
                 </div>
                 
@@ -212,7 +212,7 @@ function App() {
                       style={{ 
                         height: '10px', 
                         borderRadius: '9999px', 
-                        backgroundColor: '#3b82f6', 
+                        backgroundColor: '#1e40af', 
                         transition: 'width 0.3s ease',
                         width: `${Math.min(sensor.valor, 100)}%` 
                       }}
@@ -241,7 +241,7 @@ function App() {
                 style={{ 
                   display: 'inline-block',
                   padding: '6px 12px',
-                  backgroundColor: '#3b82f6',
+                  backgroundColor: '#1e40af',
                   color: 'white',
                   textDecoration: 'none',
                   borderRadius: '6px',
@@ -250,11 +250,11 @@ function App() {
                   transition: 'all 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = '#1d4ed8';
+                  e.target.style.backgroundColor = '#1e3a8a';
                   e.target.style.transform = 'scale(1.05)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = '#3b82f6';
+                  e.target.style.backgroundColor = '#1e40af';
                   e.target.style.transform = 'scale(1)';
                 }}
               >
