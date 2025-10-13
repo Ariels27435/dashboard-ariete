@@ -108,6 +108,30 @@ function App() {
       
       const API_URL = import.meta.env.VITE_API_URL || 'https://backend-ariete.onrender.com';
       
+      // Primero obtener la lista de sensores del ESP32
+      console.log(`🔄 Obteniendo sensores del ESP32...`);
+      const sensoresResponse = await fetch(`${API_URL}/api/esp32/sensores?api_key=ariete-esp32-2025`);
+      
+      if (!sensoresResponse.ok) {
+        console.log(`❌ Error obteniendo sensores:`, sensoresResponse.status);
+        return [{
+          hora: 'Error',
+          valor: 'No se pudieron',
+          fecha: 'cargar sensores'
+        }];
+      }
+      
+      const sensoresData = await sensoresResponse.json();
+      console.log(`✅ Sensores recibidos:`, sensoresData);
+      
+      if (!sensoresData.sensores || sensoresData.sensores.length === 0) {
+        return [{
+          hora: 'Sin datos',
+          valor: 'No hay sensores',
+          fecha: 'en el ESP32'
+        }];
+      }
+      
       // Mapear IDs de sensores a tipos del ESP32
       const sensorTypeMap = {
         'humedad': 'humedad',
@@ -117,50 +141,53 @@ function App() {
       
       const sensorType = sensorTypeMap[sensorId];
       
-      // Primero intentar obtener todas las lecturas del ESP32
-      console.log(`🔄 Obteniendo todas las lecturas del ESP32...`);
-      const response = await fetch(`${API_URL}/api/esp32/lecturas?horas=24&api_key=ariete-esp32-2025`);
+      // Buscar el sensor específico por tipo
+      const sensorData = sensoresData.sensores.find(s => s.tipo === sensorType);
       
-      if (response.ok) {
-        const data = await response.json();
-        console.log(`✅ Datos recibidos del ESP32:`, data);
-        
-        if (data && data.sensores && data.sensores.length > 0) {
-          // Buscar el sensor específico por tipo
-          const sensorData = data.sensores.find(s => s.tipo === sensorType);
-          
-          if (sensorData && sensorData.lecturas && sensorData.lecturas.length > 0) {
-            console.log(`✅ Historial encontrado para ${sensorId} (${sensorType}):`, sensorData.lecturas);
-            
-            return sensorData.lecturas.map(lectura => ({
-              hora: new Date(lectura.timestamp).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
-              valor: lectura.valor,
-              fecha: new Date(lectura.timestamp).toLocaleDateString('es-ES')
-            }));
-          } else {
-            console.log(`⚠️ No se encontraron lecturas para ${sensorId} (${sensorType})`);
-            return [{
-              hora: 'Sin datos',
-              valor: 'No hay lecturas',
-              fecha: 'del ESP32'
-            }];
-          }
-        } else {
-          console.log(`⚠️ No se encontraron sensores en la respuesta`);
-          return [{
-            hora: 'Sin datos',
-            valor: 'No hay sensores',
-            fecha: 'en el ESP32'
-          }];
-        }
-      } else {
-        console.log(`❌ Error al obtener historial para ${sensorId}:`, response.status);
+      if (!sensorData) {
+        console.log(`⚠️ No se encontró sensor de tipo ${sensorType}`);
+        return [{
+          hora: 'Sin datos',
+          valor: 'Sensor no encontrado',
+          fecha: 'en el ESP32'
+        }];
+      }
+      
+      console.log(`✅ Sensor encontrado:`, sensorData);
+      
+      // Ahora obtener las lecturas de este sensor específico
+      const lecturasResponse = await fetch(`${API_URL}/api/sensores/${sensorData.id}/lecturas?limit=24&api_key=ariete-esp32-2025`);
+      
+      if (!lecturasResponse.ok) {
+        console.log(`❌ Error obteniendo lecturas:`, lecturasResponse.status);
         return [{
           hora: 'Error',
           valor: 'No se pudieron',
-          fecha: 'cargar datos'
+          fecha: 'cargar lecturas'
         }];
       }
+      
+      const lecturasData = await lecturasResponse.json();
+      console.log(`✅ Lecturas recibidas:`, lecturasData);
+      
+      if (!lecturasData || lecturasData.length === 0) {
+        return [{
+          hora: 'Sin datos',
+          valor: 'No hay lecturas',
+          fecha: 'del ESP32'
+        }];
+      }
+      
+      // Mapear las lecturas al formato esperado
+      const historial = lecturasData.map(lectura => ({
+        hora: new Date(lectura.timestamp).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+        valor: lectura.valor,
+        fecha: new Date(lectura.timestamp).toLocaleDateString('es-ES')
+      }));
+      
+      console.log(`✅ Historial procesado para ${sensorId}:`, historial);
+      return historial;
+      
     } catch (error) {
       console.error(`❌ Error al obtener historial para ${sensorId}:`, error);
       return [{
