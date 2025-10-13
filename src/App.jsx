@@ -116,8 +116,8 @@ function App() {
         console.log(`❌ Error obteniendo sensores:`, sensoresResponse.status);
         return [{
           hora: 'Error',
-          valor: 'No se pudieron',
-          fecha: 'cargar sensores'
+          valor: 'Error conexión',
+          fecha: 'al ESP32'
         }];
       }
       
@@ -162,8 +162,8 @@ function App() {
         console.log(`❌ Error obteniendo lecturas:`, lecturasResponse.status);
         return [{
           hora: 'Error',
-          valor: 'No se pudieron',
-          fecha: 'cargar lecturas'
+          valor: 'Error lecturas',
+          fecha: 'del ESP32'
         }];
       }
       
@@ -192,7 +192,7 @@ function App() {
       console.error(`❌ Error al obtener historial para ${sensorId}:`, error);
       return [{
         hora: 'Error',
-        valor: 'Sin conexión',
+        valor: 'Error general',
         fecha: 'al ESP32'
       }];
     }
@@ -229,26 +229,29 @@ function App() {
 
   // Función para mostrar/ocultar historial
   const toggleHistorial = async (sensorId) => {
+    console.log(`🔄 Toggle historial para ${sensorId}. Estado actual:`, historialVisible);
+    
+    // Siempre cerrar todos los historiales primero
+    setHistorialVisible({});
+    
+    // Si el sensor actual no estaba abierto, abrirlo
     if (!historialVisible[sensorId]) {
-      // Cerrar todos los otros historiales primero
-      setHistorialVisible({});
-      
-      // Obtener historial real del ESP32 cuando se abre por primera vez
       console.log(`🔄 Abriendo historial para ${sensorId}...`);
+      
+      // Obtener historial real del ESP32
       const historial = await obtenerHistorialReal(sensorId);
       setHistorialDatos(prev => ({ ...prev, [sensorId]: historial }));
       
-      // Abrir solo este historial
-      setHistorialVisible(prev => ({
-        ...prev,
-        [sensorId]: true
-      }));
+      // Abrir solo este historial después de un pequeño delay
+      setTimeout(() => {
+        setHistorialVisible(prev => ({
+          ...prev,
+          [sensorId]: true
+        }));
+        console.log(`✅ Historial abierto para ${sensorId}`);
+      }, 100);
     } else {
-      // Cerrar este historial
-      setHistorialVisible(prev => ({
-        ...prev,
-        [sensorId]: false
-      }));
+      console.log(`✅ Historial cerrado para ${sensorId}`);
     }
   };
 
@@ -476,7 +479,7 @@ function App() {
                                 fontSize: '12px',
                                 marginBottom: '2px'
                               }}>
-                                {dato.valor}{dato.valor !== 'No hay lecturas' && dato.valor !== 'No se pudieron' && dato.valor !== 'Sin conexión' && dato.valor !== 'No hay sensores' ? sensor.unidad : ''}
+                                {dato.valor}{dato.valor !== 'No hay lecturas' && !dato.valor.includes('Error') && dato.valor !== 'Sin datos' && dato.valor !== 'No hay sensores' ? sensor.unidad : ''}
                               </div>
                               <div style={{ 
                                 fontSize: '10px', 
