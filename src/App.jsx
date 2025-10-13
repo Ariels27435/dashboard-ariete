@@ -108,25 +108,49 @@ function App() {
       
       const API_URL = import.meta.env.VITE_API_URL || 'https://backend-ariete.onrender.com';
       
-      // Obtener las últimas 24 horas de lecturas para este sensor
-      const response = await fetch(`${API_URL}/api/esp32/lecturas/${sensorId}?horas=24&api_key=ariete-esp32-2025`);
+      // Mapear IDs de sensores a tipos del ESP32
+      const sensorTypeMap = {
+        'humedad': 'humedad',
+        'flujo': 'caudal',
+        'nivel': 'nivel'
+      };
+      
+      const sensorType = sensorTypeMap[sensorId];
+      
+      // Primero intentar obtener todas las lecturas del ESP32
+      console.log(`🔄 Obteniendo todas las lecturas del ESP32...`);
+      const response = await fetch(`${API_URL}/api/esp32/lecturas?horas=24&api_key=ariete-esp32-2025`);
       
       if (response.ok) {
         const data = await response.json();
-        console.log(`✅ Historial recibido para ${sensorId}:`, data);
+        console.log(`✅ Datos recibidos del ESP32:`, data);
         
-        if (data && data.lecturas && data.lecturas.length > 0) {
-          return data.lecturas.map(lectura => ({
-            hora: new Date(lectura.timestamp).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
-            valor: lectura.valor,
-            fecha: new Date(lectura.timestamp).toLocaleDateString('es-ES')
-          }));
+        if (data && data.sensores && data.sensores.length > 0) {
+          // Buscar el sensor específico por tipo
+          const sensorData = data.sensores.find(s => s.tipo === sensorType);
+          
+          if (sensorData && sensorData.lecturas && sensorData.lecturas.length > 0) {
+            console.log(`✅ Historial encontrado para ${sensorId} (${sensorType}):`, sensorData.lecturas);
+            
+            return sensorData.lecturas.map(lectura => ({
+              hora: new Date(lectura.timestamp).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+              valor: lectura.valor,
+              fecha: new Date(lectura.timestamp).toLocaleDateString('es-ES')
+            }));
+          } else {
+            console.log(`⚠️ No se encontraron lecturas para ${sensorId} (${sensorType})`);
+            return [{
+              hora: 'Sin datos',
+              valor: 'No hay lecturas',
+              fecha: 'del ESP32'
+            }];
+          }
         } else {
-          // Si no hay datos reales, mostrar mensaje de no hay datos
+          console.log(`⚠️ No se encontraron sensores en la respuesta`);
           return [{
             hora: 'Sin datos',
-            valor: 'No hay lecturas',
-            fecha: 'del ESP32'
+            valor: 'No hay sensores',
+            fecha: 'en el ESP32'
           }];
         }
       } else {
@@ -145,6 +169,35 @@ function App() {
         fecha: 'al ESP32'
       }];
     }
+  };
+
+  // Función para generar historial de ejemplo cuando no hay datos reales
+  const generarHistorialEjemplo = (sensorId) => {
+    const historial = [];
+    const ahora = new Date();
+    const sensor = sensores.find(s => s.id === sensorId);
+    const valorBase = sensor ? sensor.valor : 0;
+    
+    for (let i = 11; i >= 0; i--) {
+      const hora = new Date(ahora.getTime() - (i * 60 * 60 * 1000));
+      let valor;
+      
+      if (sensorId === 'humedad') {
+        valor = Math.max(0, valorBase + Math.floor(Math.random() * 20) - 10); // Variación ±10%
+      } else if (sensorId === 'flujo') {
+        valor = Math.max(0, parseFloat(valorBase) + (Math.random() * 2 - 1)).toFixed(2); // Variación ±1 L/min
+      } else if (sensorId === 'nivel') {
+        valor = Math.max(0, Math.min(100, valorBase + Math.floor(Math.random() * 20) - 10)); // Variación ±10%
+      }
+      
+      historial.push({
+        hora: hora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+        valor: valor,
+        fecha: hora.toLocaleDateString('es-ES')
+      });
+    }
+    
+    return historial;
   };
 
   // Función para mostrar/ocultar historial
@@ -396,7 +449,7 @@ function App() {
                                 fontSize: '12px',
                                 marginBottom: '2px'
                               }}>
-                                {dato.valor}{dato.valor !== 'No hay lecturas' && dato.valor !== 'No se pudieron' && dato.valor !== 'Sin conexión' ? sensor.unidad : ''}
+                                {dato.valor}{dato.valor !== 'No hay lecturas' && dato.valor !== 'No se pudieron' && dato.valor !== 'Sin conexión' && dato.valor !== 'No hay sensores' ? sensor.unidad : ''}
                               </div>
                               <div style={{ 
                                 fontSize: '10px', 
