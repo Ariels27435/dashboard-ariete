@@ -28,6 +28,8 @@ function App() {
 
   const [ultimaActualizacion, setUltimaActualizacion] = useState(new Date().toLocaleTimeString());
   const [debugInfo, setDebugInfo] = useState('');
+  const [historialVisible, setHistorialVisible] = useState({});
+  const [historialDatos, setHistorialDatos] = useState({});
 
   // Función para obtener datos del backend
   const obtenerDatosBackend = async () => {
@@ -97,6 +99,52 @@ function App() {
       console.error('❌ Error al cargar la imagen de fondo');
     };
     img.src = '/background-image.jpeg';
+  };
+
+  // Función para generar historial de prueba
+  const generarHistorial = (sensorId, tipo) => {
+    const historial = [];
+    const ahora = new Date();
+    
+    for (let i = 23; i >= 0; i--) {
+      const hora = new Date(ahora.getTime() - (i * 60 * 60 * 1000));
+      let valor;
+      
+      if (tipo === 'humedad') {
+        valor = Math.floor(Math.random() * 50) + 20; // 20-70%
+      } else if (tipo === 'flujo') {
+        valor = (Math.random() * 8).toFixed(2); // 0-8 L/min
+      } else if (tipo === 'nivel') {
+        valor = Math.floor(Math.random() * 80) + 20; // 20-100%
+      }
+      
+      historial.push({
+        hora: hora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+        valor: valor,
+        fecha: hora.toLocaleDateString('es-ES')
+      });
+    }
+    
+    return historial;
+  };
+
+  // Función para mostrar/ocultar historial
+  const toggleHistorial = (sensorId) => {
+    if (!historialVisible[sensorId]) {
+      // Generar historial cuando se abre por primera vez
+      let tipo = '';
+      if (sensorId === 'humedad') tipo = 'humedad';
+      else if (sensorId === 'flujo') tipo = 'flujo';
+      else if (sensorId === 'nivel') tipo = 'nivel';
+      
+      const historial = generarHistorial(sensorId, tipo);
+      setHistorialDatos(prev => ({ ...prev, [sensorId]: historial }));
+    }
+    
+    setHistorialVisible(prev => ({
+      ...prev,
+      [sensorId]: !prev[sensorId]
+    }));
   };
 
   // Actualizar datos cada 3 segundos
@@ -196,8 +244,33 @@ function App() {
                   WebkitBackdropFilter: 'blur(20px)'
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginBottom: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
                   <div style={{ fontSize: '48px' }}>{sensor.icono}</div>
+                  <button
+                    onClick={() => toggleHistorial(sensor.id)}
+                    style={{
+                      background: 'linear-gradient(135deg, #ff6b35 0%, #007aff 50%, #5856d6 100%)',
+                      border: 'none',
+                      borderRadius: '8px',
+                      padding: '4px 8px',
+                      fontSize: '10px',
+                      fontWeight: '600',
+                      color: 'white',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease',
+                      boxShadow: '0 2px 6px rgba(255, 107, 53, 0.3)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.transform = 'scale(1.05)';
+                      e.target.style.boxShadow = '0 4px 12px rgba(255, 107, 53, 0.4)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.transform = 'scale(1)';
+                      e.target.style.boxShadow = '0 2px 6px rgba(255, 107, 53, 0.3)';
+                    }}
+                  >
+                    📊 Historial
+                  </button>
                 </div>
                 
                 <h2 style={{ fontSize: '17px', fontWeight: '600', color: '#1d1d1f', marginBottom: '12px', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif', letterSpacing: '-0.022em' }}>{sensor.nombre}</h2>
@@ -218,6 +291,61 @@ function App() {
                         boxShadow: '0 2px 8px rgba(255, 107, 53, 0.4), 0 0 12px rgba(0, 122, 255, 0.3)'
                       }}
                     ></div>
+                  </div>
+                )}
+
+                {/* Panel de historial desplegable */}
+                {historialVisible[sensor.id] && (
+                  <div style={{
+                    marginTop: '12px',
+                    padding: '12px',
+                    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                    borderRadius: '8px',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    maxHeight: '150px',
+                    overflowY: 'auto'
+                  }}>
+                    <div style={{
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: '#1d1d1f',
+                      marginBottom: '8px',
+                      textAlign: 'center',
+                      fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif'
+                    }}>
+                      📈 Últimas 24 horas
+                    </div>
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(6, 1fr)',
+                      gap: '4px',
+                      fontSize: '9px'
+                    }}>
+                      {historialDatos[sensor.id]?.slice(-12).map((dato, index) => (
+                        <div key={index} style={{
+                          padding: '4px',
+                          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                          borderRadius: '4px',
+                          textAlign: 'center',
+                          border: '1px solid rgba(0, 0, 0, 0.1)'
+                        }}>
+                          <div style={{ fontWeight: '600', color: '#1d1d1f' }}>
+                            {dato.valor}{sensor.unidad}
+                          </div>
+                          <div style={{ fontSize: '8px', color: '#86868b' }}>
+                            {dato.hora}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{
+                      marginTop: '8px',
+                      textAlign: 'center',
+                      fontSize: '8px',
+                      color: '#86868b'
+                    }}>
+                      Mostrando últimas 12 lecturas
+                    </div>
                   </div>
                 )}
               </div>
