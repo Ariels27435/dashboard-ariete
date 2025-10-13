@@ -167,16 +167,26 @@ function App() {
   // Función para mostrar/ocultar historial
   const toggleHistorial = async (sensorId) => {
     if (!historialVisible[sensorId]) {
+      // Cerrar todos los otros historiales primero
+      setHistorialVisible({});
+      
       // Obtener historial real del ESP32 cuando se abre por primera vez
       console.log(`🔄 Abriendo historial para ${sensorId}...`);
       const historial = await obtenerHistorialReal(sensorId);
       setHistorialDatos(prev => ({ ...prev, [sensorId]: historial }));
+      
+      // Abrir solo este historial
+      setHistorialVisible(prev => ({
+        ...prev,
+        [sensorId]: true
+      }));
+    } else {
+      // Cerrar este historial
+      setHistorialVisible(prev => ({
+        ...prev,
+        [sensorId]: false
+      }));
     }
-    
-    setHistorialVisible(prev => ({
-      ...prev,
-      [sensorId]: !prev[sensorId]
-    }));
   };
 
   // Actualizar datos cada 3 segundos
@@ -267,8 +277,8 @@ function App() {
                     borderRadius: '16px', 
                     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08)', 
                     border: '1px solid rgba(255, 255, 255, 0.2)',
-                    width: historialVisible[sensor.id] ? '420px' : '320px', 
-                    minHeight: historialVisible[sensor.id] ? '400px' : '200px',
+                    width: historialVisible[sensor.id] ? '450px' : '320px', 
+                    minHeight: historialVisible[sensor.id] ? '450px' : '200px',
                     transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                     cursor: 'pointer',
                     transform: 'scale(1)',
@@ -341,14 +351,44 @@ function App() {
                     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
                   }}>
                     <div style={{
-                      fontSize: '14px',
-                      fontWeight: '600',
-                      color: '#1d1d1f',
-                      marginBottom: '12px',
-                      textAlign: 'center',
-                      fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif'
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginBottom: '12px'
                     }}>
-                      📈 Historial Real del ESP32 - Últimas 24 horas
+                      <div style={{
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        color: '#1d1d1f',
+                        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif'
+                      }}>
+                        📈 Historial Real del ESP32 - Últimas 24 horas
+                      </div>
+                      <button
+                        onClick={() => toggleHistorial(sensor.id)}
+                        style={{
+                          background: 'linear-gradient(135deg, #ff3b30 0%, #ff6b35 100%)',
+                          border: 'none',
+                          borderRadius: '6px',
+                          padding: '4px 8px',
+                          fontSize: '10px',
+                          fontWeight: '600',
+                          color: 'white',
+                          cursor: 'pointer',
+                          transition: 'all 0.3s ease',
+                          boxShadow: '0 2px 6px rgba(255, 59, 48, 0.3)'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.transform = 'scale(1.05)';
+                          e.target.style.boxShadow = '0 4px 12px rgba(255, 59, 48, 0.4)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.transform = 'scale(1)';
+                          e.target.style.boxShadow = '0 2px 6px rgba(255, 59, 48, 0.3)';
+                        }}
+                      >
+                        ✕ Cerrar
+                      </button>
                     </div>
                     <div style={{
                       display: 'grid',

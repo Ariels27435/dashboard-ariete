@@ -50,10 +50,17 @@
 
 /* Estilos adicionales para sensores expandidos */
 .sensor-card[style*="z-index: 10"] {
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2), 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+  border: 2px solid rgba(255, 107, 53, 0.3) !important;
 }
 
 /* Animación suave para la expansión */
 .sensor-card {
   transform-origin: center center;
+}
+
+/* Efecto de superposición cuando hay un sensor expandido */
+.dashboard-content:has(.sensor-card[style*="z-index: 10"]) .sensor-card:not([style*="z-index: 10"]) {
+  opacity: 0.7;
+  transform: scale(0.98);
 }
