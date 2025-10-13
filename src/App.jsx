@@ -169,7 +169,7 @@ function App() {
         {/* Título arriba */}
         <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start', marginBottom: 'auto' }}>
           <div>
-            <h1 style={{ fontSize: '24px', fontWeight: '900', color: '#ffffff', margin: '0', textShadow: '3px 3px 6px rgba(0,0,0,0.8)', fontFamily: 'Arial, sans-serif', letterSpacing: '1px', lineHeight: '1.2' }}>DASHBOARD ARIETE INTELIGENTE CON MICROSERVICIOS E IOT (INTERNET DE LAS COSAS) 🌿</h1>
+            <h1 style={{ fontSize: '24px', fontWeight: '900', color: '#ffffff', margin: '0', textShadow: '3px 3px 6px rgba(0,0,0,0.8)', fontFamily: 'Times New Roman, serif', letterSpacing: '1px', lineHeight: '1.2' }}>DASHBOARD ARIETE INTELIGENTE CON MICROSERVICIOS E IOT (INTERNET DE LAS COSAS) 🌿</h1>
           </div>
         </div>
 
