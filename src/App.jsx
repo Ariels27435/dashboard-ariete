@@ -101,35 +101,34 @@ function App() {
     img.src = '/background-image.jpeg';
   };
 
-  // Función para obtener historial real del ESP32
-  const obtenerHistorialReal = async (sensorId) => {
+  // Función simplificada para obtener el valor actual del ESP32
+  const obtenerValorActual = async (sensorId) => {
     try {
-      console.log(`🔄 Obteniendo historial real para ${sensorId}...`);
+      console.log(`🔄 Obteniendo valor actual para ${sensorId}...`);
       
       const API_URL = import.meta.env.VITE_API_URL || 'https://backend-ariete.onrender.com';
       
-      // Primero obtener la lista de sensores del ESP32
-      console.log(`🔄 Obteniendo sensores del ESP32...`);
-      const sensoresResponse = await fetch(`${API_URL}/api/esp32/sensores?api_key=ariete-esp32-2025`);
+      // Obtener datos actuales del ESP32
+      const response = await fetch(`${API_URL}/api/esp32/sensores?api_key=ariete-esp32-2025`);
       
-      if (!sensoresResponse.ok) {
-        console.log(`❌ Error obteniendo sensores:`, sensoresResponse.status);
-        return [{
-          hora: 'Error',
-          valor: 'Error conexión',
-          fecha: 'al ESP32'
-        }];
+      if (!response.ok) {
+        console.log(`❌ Error obteniendo datos:`, response.status);
+        return {
+          hora: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+          valor: 'Sin conexión',
+          fecha: new Date().toLocaleDateString('es-ES')
+        };
       }
       
-      const sensoresData = await sensoresResponse.json();
-      console.log(`✅ Sensores recibidos:`, sensoresData);
+      const data = await response.json();
+      console.log(`✅ Datos recibidos:`, data);
       
-      if (!sensoresData.sensores || sensoresData.sensores.length === 0) {
-        return [{
-          hora: 'Sin datos',
-          valor: 'No hay sensores',
-          fecha: 'en el ESP32'
-        }];
+      if (!data.sensores || data.sensores.length === 0) {
+        return {
+          hora: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+          valor: 'Sin sensores',
+          fecha: new Date().toLocaleDateString('es-ES')
+        };
       }
       
       // Mapear IDs de sensores a tipos del ESP32
@@ -142,59 +141,32 @@ function App() {
       const sensorType = sensorTypeMap[sensorId];
       
       // Buscar el sensor específico por tipo
-      const sensorData = sensoresData.sensores.find(s => s.tipo === sensorType);
+      const sensorData = data.sensores.find(s => s.tipo === sensorType);
       
-      if (!sensorData) {
-        console.log(`⚠️ No se encontró sensor de tipo ${sensorType}`);
-        return [{
-          hora: 'Sin datos',
-          valor: 'Sensor no encontrado',
-          fecha: 'en el ESP32'
-        }];
+      if (!sensorData || !sensorData.ultimaLectura) {
+        console.log(`⚠️ No se encontró sensor o lectura para ${sensorType}`);
+        return {
+          hora: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+          valor: 'Sin datos',
+          fecha: new Date().toLocaleDateString('es-ES')
+        };
       }
       
-      console.log(`✅ Sensor encontrado:`, sensorData);
+      console.log(`✅ Valor actual encontrado para ${sensorId}:`, sensorData.ultimaLectura);
       
-      // Ahora obtener las lecturas de este sensor específico
-      const lecturasResponse = await fetch(`${API_URL}/api/sensores/${sensorData.id}/lecturas?limit=24&api_key=ariete-esp32-2025`);
-      
-      if (!lecturasResponse.ok) {
-        console.log(`❌ Error obteniendo lecturas:`, lecturasResponse.status);
-        return [{
-          hora: 'Error',
-          valor: 'Error lecturas',
-          fecha: 'del ESP32'
-        }];
-      }
-      
-      const lecturasData = await lecturasResponse.json();
-      console.log(`✅ Lecturas recibidas:`, lecturasData);
-      
-      if (!lecturasData || lecturasData.length === 0) {
-        return [{
-          hora: 'Sin datos',
-          valor: 'No hay lecturas',
-          fecha: 'del ESP32'
-        }];
-      }
-      
-      // Mapear las lecturas al formato esperado
-      const historial = lecturasData.map(lectura => ({
-        hora: new Date(lectura.timestamp).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
-        valor: lectura.valor,
-        fecha: new Date(lectura.timestamp).toLocaleDateString('es-ES')
-      }));
-      
-      console.log(`✅ Historial procesado para ${sensorId}:`, historial);
-      return historial;
+      return {
+        hora: new Date(sensorData.ultimaLectura.timestamp).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+        valor: sensorData.ultimaLectura.valor,
+        fecha: new Date(sensorData.ultimaLectura.timestamp).toLocaleDateString('es-ES')
+      };
       
     } catch (error) {
-      console.error(`❌ Error al obtener historial para ${sensorId}:`, error);
-      return [{
-        hora: 'Error',
-        valor: 'Error general',
-        fecha: 'al ESP32'
-      }];
+      console.error(`❌ Error al obtener valor actual para ${sensorId}:`, error);
+      return {
+        hora: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+        valor: 'Error',
+        fecha: new Date().toLocaleDateString('es-ES')
+      };
     }
   };
 
@@ -231,28 +203,35 @@ function App() {
   const toggleHistorial = async (sensorId) => {
     console.log(`🔄 Toggle historial para ${sensorId}. Estado actual:`, historialVisible);
     
-    // Siempre cerrar todos los historiales primero
+    // Si este sensor ya está abierto, cerrarlo
+    if (historialVisible[sensorId]) {
+      setHistorialVisible(prev => ({
+        ...prev,
+        [sensorId]: false
+      }));
+      console.log(`✅ Historial cerrado para ${sensorId}`);
+      return;
+    }
+    
+    // Cerrar todos los otros historiales
     setHistorialVisible({});
     
-    // Si el sensor actual no estaba abierto, abrirlo
-    if (!historialVisible[sensorId]) {
-      console.log(`🔄 Abriendo historial para ${sensorId}...`);
-      
-      // Obtener historial real del ESP32
-      const historial = await obtenerHistorialReal(sensorId);
-      setHistorialDatos(prev => ({ ...prev, [sensorId]: historial }));
-      
-      // Abrir solo este historial después de un pequeño delay
-      setTimeout(() => {
-        setHistorialVisible(prev => ({
-          ...prev,
-          [sensorId]: true
-        }));
-        console.log(`✅ Historial abierto para ${sensorId}`);
-      }, 100);
-    } else {
-      console.log(`✅ Historial cerrado para ${sensorId}`);
-    }
+    // Obtener valor actual del ESP32
+    console.log(`🔄 Obteniendo valor actual para ${sensorId}...`);
+    const valorActual = await obtenerValorActual(sensorId);
+    
+    // Crear un array con el valor actual
+    const historial = [valorActual];
+    
+    setHistorialDatos(prev => ({ ...prev, [sensorId]: historial }));
+    
+    // Abrir este historial
+    setHistorialVisible(prev => ({
+      ...prev,
+      [sensorId]: true
+    }));
+    
+    console.log(`✅ Historial abierto para ${sensorId} con valor:`, valorActual);
   };
 
   // Actualizar datos cada 3 segundos
@@ -428,7 +407,7 @@ function App() {
                         color: '#1d1d1f',
                         fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif'
                       }}>
-                        📈 Historial Real del ESP32 - Últimas 24 horas
+                        📊 Valor Actual del ESP32
                       </div>
                       <button
                         onClick={() => toggleHistorial(sensor.id)}
@@ -457,50 +436,42 @@ function App() {
                       </button>
                     </div>
                     {historialDatos[sensor.id] && historialDatos[sensor.id].length > 0 ? (
-                      <>
-                        <div style={{
-                          display: 'grid',
-                          gridTemplateColumns: 'repeat(4, 1fr)',
-                          gap: '8px',
-                          fontSize: '11px'
+                      <div style={{
+                        textAlign: 'center',
+                        padding: '20px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        borderRadius: '12px',
+                        border: '2px solid rgba(0, 122, 255, 0.3)',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                      }}>
+                        <div style={{ 
+                          fontSize: '24px', 
+                          fontWeight: '700',
+                          color: '#1d1d1f',
+                          marginBottom: '8px',
+                          fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif'
                         }}>
-                          {historialDatos[sensor.id].slice(-12).map((dato, index) => (
-                            <div key={index} style={{
-                              padding: '8px',
-                              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                              borderRadius: '8px',
-                              textAlign: 'center',
-                              border: '1px solid rgba(0, 0, 0, 0.1)',
-                              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
-                            }}>
-                              <div style={{ 
-                                fontWeight: '600', 
-                                color: '#1d1d1f',
-                                fontSize: '12px',
-                                marginBottom: '2px'
-                              }}>
-                                {dato.valor}{dato.valor !== 'No hay lecturas' && !dato.valor.includes('Error') && dato.valor !== 'Sin datos' && dato.valor !== 'No hay sensores' ? sensor.unidad : ''}
-                              </div>
-                              <div style={{ 
-                                fontSize: '10px', 
-                                color: '#86868b',
-                                fontFamily: 'monospace'
-                              }}>
-                                {dato.hora}
-                              </div>
-                            </div>
-                          ))}
+                          {historialDatos[sensor.id][0].valor}
+                          {!historialDatos[sensor.id][0].valor.includes('Error') && 
+                           !historialDatos[sensor.id][0].valor.includes('Sin') ? 
+                           ` ${sensor.unidad}` : ''}
                         </div>
-                        <div style={{
-                          marginTop: '12px',
-                          textAlign: 'center',
-                          fontSize: '10px',
+                        <div style={{ 
+                          fontSize: '14px', 
                           color: '#86868b',
-                          fontStyle: 'italic'
+                          fontWeight: '500',
+                          marginBottom: '4px'
                         }}>
-                          📊 Datos reales del ESP32 - Mostrando últimas {Math.min(historialDatos[sensor.id].length, 12)} lecturas
+                          📅 {historialDatos[sensor.id][0].fecha}
                         </div>
-                      </>
+                        <div style={{ 
+                          fontSize: '12px', 
+                          color: '#86868b',
+                          fontFamily: 'monospace'
+                        }}>
+                          🕐 {historialDatos[sensor.id][0].hora}
+                        </div>
+                      </div>
                     ) : (
                       <div style={{
                         textAlign: 'center',
@@ -512,7 +483,7 @@ function App() {
                           Conectando con ESP32...
                         </div>
                         <div style={{ fontSize: '12px' }}>
-                          Obteniendo datos reales del sensor
+                          Obteniendo valor actual del sensor
                         </div>
                       </div>
                     )}
