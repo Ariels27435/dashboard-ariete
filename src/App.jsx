@@ -183,7 +183,7 @@ function App() {
                 className="sensor-card"
                 style={{ 
                   padding: '15px', 
-                  backgroundColor: 'rgba(255, 255, 255, 0.15)', 
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)', 
                   borderRadius: '10px', 
                   boxShadow: '0 4px 8px rgba(0,0,0,0.15)', 
                   borderLeft: '4px solid #3b82f6', 
@@ -196,12 +196,8 @@ function App() {
                   WebkitBackdropFilter: 'blur(1px)'
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginBottom: '10px' }}>
                   <div style={{ fontSize: '48px' }}>{sensor.icono}</div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '12px', color: '#6b7280' }}>Estado</div>
-                    <div style={{ fontSize: '12px', fontWeight: '600', color: '#059669' }}>✅ OK</div>
-                  </div>
                 </div>
                 
                 <h2 style={{ fontSize: '18px', fontWeight: 'bold', color: '#1f2937', marginBottom: '8px' }}>{sensor.nombre}</h2>
