@@ -10,13 +10,13 @@ function App() {
         unidad: '%',
         icono: '🌧️'
       },
-    {
-      id: 'flujo',
-      nombre: 'Sensor Flujo Ariete',
-      valor: 0,
-      unidad: 'L/min',
-      icono: '💧'
-    },
+      {
+        id: 'flujo',
+        nombre: 'Sensor Flujo Ariete',
+        valor: 0,
+        unidad: 'L/min',
+        icono: '🌊'
+      },
     {
       id: 'nivel',
       nombre: 'Sensor Nivel Ariete',
@@ -61,7 +61,7 @@ function App() {
                 nombre: 'Sensor Flujo Ariete',
                 valor: sensoresAriete.find(s => s.tipo === 'caudal')?.ultimaLectura?.valor || 0,
                 unidad: 'L/min',
-                icono: '💧'
+                icono: '🌊'
               },
               {
                 id: 'nivel',
@@ -124,7 +124,7 @@ function App() {
         nombre: 'Sensor Flujo Ariete',
         valor: 0.00,
         unidad: 'L/min',
-        icono: '💧'
+        icono: '🌊'
       },
       {
         id: 'nivel',
