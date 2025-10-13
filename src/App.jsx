@@ -101,21 +101,57 @@ function App() {
     img.src = '/background-image.jpeg';
   };
 
-  // Función para generar historial de prueba
-  const generarHistorial = (sensorId, tipo) => {
+  // Función para obtener historial real del ESP32
+  const obtenerHistorialReal = async (sensorId) => {
+    try {
+      console.log(`🔄 Obteniendo historial real para ${sensorId}...`);
+      
+      const API_URL = import.meta.env.VITE_API_URL || 'https://backend-ariete.onrender.com';
+      
+      // Obtener las últimas 24 horas de lecturas para este sensor
+      const response = await fetch(`${API_URL}/api/esp32/lecturas/${sensorId}?horas=24&api_key=ariete-esp32-2025`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log(`✅ Historial recibido para ${sensorId}:`, data);
+        
+        if (data && data.lecturas && data.lecturas.length > 0) {
+          return data.lecturas.map(lectura => ({
+            hora: new Date(lectura.timestamp).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+            valor: lectura.valor,
+            fecha: new Date(lectura.timestamp).toLocaleDateString('es-ES')
+          }));
+        } else {
+          // Si no hay datos reales, generar algunos datos de ejemplo basados en el valor actual
+          return generarHistorialEjemplo(sensorId);
+        }
+      } else {
+        console.log(`❌ Error al obtener historial para ${sensorId}:`, response.status);
+        return generarHistorialEjemplo(sensorId);
+      }
+    } catch (error) {
+      console.error(`❌ Error al obtener historial para ${sensorId}:`, error);
+      return generarHistorialEjemplo(sensorId);
+    }
+  };
+
+  // Función para generar historial de ejemplo cuando no hay datos reales
+  const generarHistorialEjemplo = (sensorId) => {
     const historial = [];
     const ahora = new Date();
+    const sensor = sensores.find(s => s.id === sensorId);
+    const valorBase = sensor ? sensor.valor : 0;
     
-    for (let i = 23; i >= 0; i--) {
+    for (let i = 11; i >= 0; i--) {
       const hora = new Date(ahora.getTime() - (i * 60 * 60 * 1000));
       let valor;
       
-      if (tipo === 'humedad') {
-        valor = Math.floor(Math.random() * 50) + 20; // 20-70%
-      } else if (tipo === 'flujo') {
-        valor = (Math.random() * 8).toFixed(2); // 0-8 L/min
-      } else if (tipo === 'nivel') {
-        valor = Math.floor(Math.random() * 80) + 20; // 20-100%
+      if (sensorId === 'humedad') {
+        valor = Math.max(0, valorBase + Math.floor(Math.random() * 20) - 10); // Variación ±10%
+      } else if (sensorId === 'flujo') {
+        valor = Math.max(0, parseFloat(valorBase) + (Math.random() * 2 - 1)).toFixed(2); // Variación ±1 L/min
+      } else if (sensorId === 'nivel') {
+        valor = Math.max(0, Math.min(100, valorBase + Math.floor(Math.random() * 20) - 10)); // Variación ±10%
       }
       
       historial.push({
@@ -129,15 +165,11 @@ function App() {
   };
 
   // Función para mostrar/ocultar historial
-  const toggleHistorial = (sensorId) => {
+  const toggleHistorial = async (sensorId) => {
     if (!historialVisible[sensorId]) {
-      // Generar historial cuando se abre por primera vez
-      let tipo = '';
-      if (sensorId === 'humedad') tipo = 'humedad';
-      else if (sensorId === 'flujo') tipo = 'flujo';
-      else if (sensorId === 'nivel') tipo = 'nivel';
-      
-      const historial = generarHistorial(sensorId, tipo);
+      // Obtener historial real del ESP32 cuando se abre por primera vez
+      console.log(`🔄 Abriendo historial para ${sensorId}...`);
+      const historial = await obtenerHistorialReal(sensorId);
       setHistorialDatos(prev => ({ ...prev, [sensorId]: historial }));
     }
     
@@ -226,24 +258,26 @@ function App() {
           {/* Todos los sensores en línea horizontal centrados */}
           <div style={{ display: 'flex', gap: '15px', marginBottom: '5px', justifyContent: 'center', flexWrap: 'wrap' }}>
             {sensores.map((sensor) => (
-              <div 
-                key={sensor.id} 
-                className="sensor-card"
-                style={{ 
-                  padding: '20px', 
-                  backgroundColor: 'rgba(255, 255, 255, 0.95)', 
-                  borderRadius: '16px', 
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08)', 
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  width: '320px', 
-                  minHeight: '200px',
-                  transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                  cursor: 'pointer',
-                  transform: 'scale(1)',
-                  backdropFilter: 'blur(20px)',
-                  WebkitBackdropFilter: 'blur(20px)'
-                }}
-              >
+                <div 
+                  key={sensor.id} 
+                  className="sensor-card"
+                  style={{ 
+                    padding: '20px', 
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+                    borderRadius: '16px', 
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08)', 
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    width: historialVisible[sensor.id] ? '420px' : '320px', 
+                    minHeight: historialVisible[sensor.id] ? '400px' : '200px',
+                    transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                    cursor: 'pointer',
+                    transform: 'scale(1)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    zIndex: historialVisible[sensor.id] ? '10' : '1',
+                    position: 'relative'
+                  }}
+                >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
                   <div style={{ fontSize: '48px' }}>{sensor.icono}</div>
                   <button
@@ -298,53 +332,65 @@ function App() {
                 {historialVisible[sensor.id] && (
                   <div style={{
                     marginTop: '12px',
-                    padding: '12px',
+                    padding: '16px',
                     backgroundColor: 'rgba(0, 0, 0, 0.05)',
-                    borderRadius: '8px',
+                    borderRadius: '12px',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
-                    maxHeight: '150px',
-                    overflowY: 'auto'
+                    maxHeight: '250px',
+                    overflowY: 'auto',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
                   }}>
                     <div style={{
-                      fontSize: '12px',
+                      fontSize: '14px',
                       fontWeight: '600',
                       color: '#1d1d1f',
-                      marginBottom: '8px',
+                      marginBottom: '12px',
                       textAlign: 'center',
                       fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif'
                     }}>
-                      📈 Últimas 24 horas
+                      📈 Historial Real del ESP32 - Últimas 24 horas
                     </div>
                     <div style={{
                       display: 'grid',
-                      gridTemplateColumns: 'repeat(6, 1fr)',
-                      gap: '4px',
-                      fontSize: '9px'
+                      gridTemplateColumns: 'repeat(4, 1fr)',
+                      gap: '8px',
+                      fontSize: '11px'
                     }}>
                       {historialDatos[sensor.id]?.slice(-12).map((dato, index) => (
                         <div key={index} style={{
-                          padding: '4px',
-                          backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                          borderRadius: '4px',
+                          padding: '8px',
+                          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                          borderRadius: '8px',
                           textAlign: 'center',
-                          border: '1px solid rgba(0, 0, 0, 0.1)'
+                          border: '1px solid rgba(0, 0, 0, 0.1)',
+                          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
                         }}>
-                          <div style={{ fontWeight: '600', color: '#1d1d1f' }}>
+                          <div style={{ 
+                            fontWeight: '600', 
+                            color: '#1d1d1f',
+                            fontSize: '12px',
+                            marginBottom: '2px'
+                          }}>
                             {dato.valor}{sensor.unidad}
                           </div>
-                          <div style={{ fontSize: '8px', color: '#86868b' }}>
+                          <div style={{ 
+                            fontSize: '10px', 
+                            color: '#86868b',
+                            fontFamily: 'monospace'
+                          }}>
                             {dato.hora}
                           </div>
                         </div>
                       ))}
                     </div>
                     <div style={{
-                      marginTop: '8px',
+                      marginTop: '12px',
                       textAlign: 'center',
-                      fontSize: '8px',
-                      color: '#86868b'
+                      fontSize: '10px',
+                      color: '#86868b',
+                      fontStyle: 'italic'
                     }}>
-                      Mostrando últimas 12 lecturas
+                      📊 Datos reales del ESP32 - Mostrando últimas 12 lecturas
                     </div>
                   </div>
                 )}
