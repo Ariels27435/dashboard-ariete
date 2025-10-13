@@ -182,39 +182,40 @@ function App() {
                 key={sensor.id} 
                 className="sensor-card"
                 style={{ 
-                  padding: '15px', 
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)', 
-                  borderRadius: '10px', 
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.15)', 
-                  borderLeft: '4px solid #1e40af', 
+                  padding: '20px', 
+                  backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+                  borderRadius: '16px', 
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08)', 
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
                   width: '320px', 
                   minHeight: '200px',
-                  transition: 'all 0.3s ease',
+                  transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                   cursor: 'pointer',
                   transform: 'scale(1)',
-                  backdropFilter: 'blur(1px)',
-                  WebkitBackdropFilter: 'blur(1px)'
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', marginBottom: '10px' }}>
                   <div style={{ fontSize: '48px' }}>{sensor.icono}</div>
                 </div>
                 
-                <h2 style={{ fontSize: '18px', fontWeight: 'bold', color: '#1f2937', marginBottom: '8px' }}>{sensor.nombre}</h2>
+                <h2 style={{ fontSize: '17px', fontWeight: '600', color: '#1d1d1f', marginBottom: '12px', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif', letterSpacing: '-0.022em' }}>{sensor.nombre}</h2>
                 
-                <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#1e40af', marginBottom: '8px' }}>
-                  {sensor.valor} <span style={{ fontSize: '18px', color: '#6b7280' }}>{sensor.unidad}</span>
+                <div style={{ fontSize: '36px', fontWeight: '700', color: '#1d1d1f', marginBottom: '12px', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif', letterSpacing: '-0.022em' }}>
+                  {sensor.valor} <span style={{ fontSize: '20px', fontWeight: '500', color: '#86868b' }}>{sensor.unidad}</span>
                 </div>
                 
                 {sensor.unidad === '%' && (
-                  <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '9999px', height: '10px', marginBottom: '8px' }}>
+                  <div style={{ width: '100%', backgroundColor: '#f5f5f7', borderRadius: '8px', height: '8px', marginBottom: '8px', overflow: 'hidden' }}>
                     <div
                       style={{ 
-                        height: '10px', 
-                        borderRadius: '9999px', 
-                        backgroundColor: '#1e40af', 
-                        transition: 'width 0.3s ease',
-                        width: `${Math.min(sensor.valor, 100)}%` 
+                        height: '8px', 
+                        borderRadius: '8px', 
+                        backgroundColor: '#007aff', 
+                        transition: 'width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                        width: `${Math.min(sensor.valor, 100)}%`,
+                        boxShadow: '0 1px 3px rgba(0, 122, 255, 0.3)'
                       }}
                     ></div>
                   </div>
