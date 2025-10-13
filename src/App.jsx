@@ -122,46 +122,29 @@ function App() {
             fecha: new Date(lectura.timestamp).toLocaleDateString('es-ES')
           }));
         } else {
-          // Si no hay datos reales, generar algunos datos de ejemplo basados en el valor actual
-          return generarHistorialEjemplo(sensorId);
+          // Si no hay datos reales, mostrar mensaje de no hay datos
+          return [{
+            hora: 'Sin datos',
+            valor: 'No hay lecturas',
+            fecha: 'del ESP32'
+          }];
         }
       } else {
         console.log(`❌ Error al obtener historial para ${sensorId}:`, response.status);
-        return generarHistorialEjemplo(sensorId);
+        return [{
+          hora: 'Error',
+          valor: 'No se pudieron',
+          fecha: 'cargar datos'
+        }];
       }
     } catch (error) {
       console.error(`❌ Error al obtener historial para ${sensorId}:`, error);
-      return generarHistorialEjemplo(sensorId);
+      return [{
+        hora: 'Error',
+        valor: 'Sin conexión',
+        fecha: 'al ESP32'
+      }];
     }
-  };
-
-  // Función para generar historial de ejemplo cuando no hay datos reales
-  const generarHistorialEjemplo = (sensorId) => {
-    const historial = [];
-    const ahora = new Date();
-    const sensor = sensores.find(s => s.id === sensorId);
-    const valorBase = sensor ? sensor.valor : 0;
-    
-    for (let i = 11; i >= 0; i--) {
-      const hora = new Date(ahora.getTime() - (i * 60 * 60 * 1000));
-      let valor;
-      
-      if (sensorId === 'humedad') {
-        valor = Math.max(0, valorBase + Math.floor(Math.random() * 20) - 10); // Variación ±10%
-      } else if (sensorId === 'flujo') {
-        valor = Math.max(0, parseFloat(valorBase) + (Math.random() * 2 - 1)).toFixed(2); // Variación ±1 L/min
-      } else if (sensorId === 'nivel') {
-        valor = Math.max(0, Math.min(100, valorBase + Math.floor(Math.random() * 20) - 10)); // Variación ±10%
-      }
-      
-      historial.push({
-        hora: hora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
-        valor: valor,
-        fecha: hora.toLocaleDateString('es-ES')
-      });
-    }
-    
-    return historial;
   };
 
   // Función para mostrar/ocultar historial
@@ -390,48 +373,66 @@ function App() {
                         ✕ Cerrar
                       </button>
                     </div>
-                    <div style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(4, 1fr)',
-                      gap: '8px',
-                      fontSize: '11px'
-                    }}>
-                      {historialDatos[sensor.id]?.slice(-12).map((dato, index) => (
-                        <div key={index} style={{
-                          padding: '8px',
-                          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                          borderRadius: '8px',
-                          textAlign: 'center',
-                          border: '1px solid rgba(0, 0, 0, 0.1)',
-                          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+                    {historialDatos[sensor.id] && historialDatos[sensor.id].length > 0 ? (
+                      <>
+                        <div style={{
+                          display: 'grid',
+                          gridTemplateColumns: 'repeat(4, 1fr)',
+                          gap: '8px',
+                          fontSize: '11px'
                         }}>
-                          <div style={{ 
-                            fontWeight: '600', 
-                            color: '#1d1d1f',
-                            fontSize: '12px',
-                            marginBottom: '2px'
-                          }}>
-                            {dato.valor}{sensor.unidad}
-                          </div>
-                          <div style={{ 
-                            fontSize: '10px', 
-                            color: '#86868b',
-                            fontFamily: 'monospace'
-                          }}>
-                            {dato.hora}
-                          </div>
-          </div>
-        ))}
-      </div>
-                    <div style={{
-                      marginTop: '12px',
-                      textAlign: 'center',
-                      fontSize: '10px',
-                      color: '#86868b',
-                      fontStyle: 'italic'
-                    }}>
-                      📊 Datos reales del ESP32 - Mostrando últimas 12 lecturas
-        </div>
+                          {historialDatos[sensor.id].slice(-12).map((dato, index) => (
+                            <div key={index} style={{
+                              padding: '8px',
+                              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                              borderRadius: '8px',
+                              textAlign: 'center',
+                              border: '1px solid rgba(0, 0, 0, 0.1)',
+                              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+                            }}>
+                              <div style={{ 
+                                fontWeight: '600', 
+                                color: '#1d1d1f',
+                                fontSize: '12px',
+                                marginBottom: '2px'
+                              }}>
+                                {dato.valor}{dato.valor !== 'No hay lecturas' && dato.valor !== 'No se pudieron' && dato.valor !== 'Sin conexión' ? sensor.unidad : ''}
+                              </div>
+                              <div style={{ 
+                                fontSize: '10px', 
+                                color: '#86868b',
+                                fontFamily: 'monospace'
+                              }}>
+                                {dato.hora}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <div style={{
+                          marginTop: '12px',
+                          textAlign: 'center',
+                          fontSize: '10px',
+                          color: '#86868b',
+                          fontStyle: 'italic'
+                        }}>
+                          📊 Datos reales del ESP32 - Mostrando últimas {Math.min(historialDatos[sensor.id].length, 12)} lecturas
+                        </div>
+                      </>
+                    ) : (
+                      <div style={{
+                        textAlign: 'center',
+                        padding: '20px',
+                        color: '#86868b'
+                      }}>
+                        <div style={{ fontSize: '16px', marginBottom: '8px' }}>📡</div>
+                        <div style={{ fontSize: '14px', fontWeight: '600', marginBottom: '4px' }}>
+                          Conectando con ESP32...
+                        </div>
+                        <div style={{ fontSize: '12px' }}>
+                          Obteniendo datos reales del sensor
+                        </div>
+                      </div>
+                    )}
       </div>
                 )}
               </div>
