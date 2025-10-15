@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "node backend/server-simple.js",
+    "start": "node backend/server-ultra-simple.js",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
