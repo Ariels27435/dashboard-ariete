@@ -37,47 +37,41 @@ function App() {
       console.log('🔄 Obteniendo datos del backend...');
       
       const API_URL = import.meta.env.VITE_API_URL || 'https://backend-ariete.onrender.com';
-      const response = await fetch(`${API_URL}/api/esp32/sensores?api_key=ariete-esp32-2025`);
+      const response = await fetch(`${API_URL}/api/estado`);
       
       if (response.ok) {
         const data = await response.json();
         console.log('✅ Datos recibidos:', data);
         
-        if (data && data.sensores && data.sensores.length > 0) {
-          // Buscar los sensores del Ariete
-          const sensoresAriete = data.sensores.filter(s => 
-            s.nombre.includes('Ariete')
-          );
+        // El backend ultra simple devuelve datos directamente
+        if (data) {
+          const nuevosSensores = [
+            {
+              id: 'humedad',
+              nombre: 'Sensor Humedad Ariete',
+              valor: data.humedad || 0,
+              unidad: '%',
+              icono: '🌧️'
+            },
+            {
+              id: 'flujo',
+              nombre: 'Sensor Flujo Ariete',
+              valor: data.flujo || 0,
+              unidad: 'L/min',
+              icono: '💦'
+            },
+            {
+              id: 'nivel',
+              nombre: 'Sensor Nivel Ariete',
+              valor: data.nivel || 0,
+              unidad: '%',
+              icono: '🛢️'
+            }
+          ];
           
-          if (sensoresAriete.length >= 3) {
-            const nuevosSensores = [
-              {
-                id: 'humedad',
-                nombre: 'Sensor Humedad Ariete',
-                valor: sensoresAriete.find(s => s.tipo === 'humedad')?.ultimaLectura?.valor || 0,
-                unidad: '%',
-                icono: '🌧️'
-              },
-              {
-                id: 'flujo',
-                nombre: 'Sensor Flujo Ariete',
-                valor: sensoresAriete.find(s => s.tipo === 'caudal')?.ultimaLectura?.valor || 0,
-                unidad: 'L/min',
-                icono: '💦'
-              },
-              {
-                id: 'nivel',
-                nombre: 'Sensor Nivel Ariete',
-                valor: sensoresAriete.find(s => s.tipo === 'nivel')?.ultimaLectura?.valor || 0,
-                unidad: '%',
-                icono: '🛢️'
-              }
-            ];
-            
-            setSensores(nuevosSensores);
-            setUltimaActualizacion(new Date().toLocaleTimeString());
-            console.log('✅ Sensores actualizados:', nuevosSensores);
-          }
+          setSensores(nuevosSensores);
+          setUltimaActualizacion(new Date().toLocaleTimeString());
+          console.log('✅ Sensores actualizados:', nuevosSensores);
         }
       } else {
         console.log('❌ Error en respuesta:', response.status);
