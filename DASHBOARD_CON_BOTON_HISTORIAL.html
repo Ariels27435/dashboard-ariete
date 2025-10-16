@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Ariete Inteligente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('background-image.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen p-6">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">
+                    DASHBOARD ARIETE INTELIGENTE CON MICROSERVICIOS E IOT (INTERNET DE LAS COSAS)
+                </h1>
+            </div>
+
+            <!-- Botón de Historial Principal -->
+            <div class="text-center mb-8">
+                <button onclick="abrirHistorial()" class="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-8 py-4 rounded-xl text-2xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+                    📊 VER HISTORIAL COMPLETO DEL SISTEMA
+                </button>
+                <p class="text-white mt-2 text-lg drop-shadow">Se abrirá en una nueva pestaña</p>
+            </div>
+
+            <!-- Sensor Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Sensor Humedad -->
+                <div class="glass-effect rounded-xl p-6 relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-4xl">🌫️</div>
+                        <button onclick="abrirHistorial()" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors">
+                            Historial
+                        </button>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Sensor Humedad Ariete</h3>
+                    <div id="humedad-value" class="text-4xl font-bold text-red-400 mb-4">--</div>
+                    <div class="w-full bg-gray-300 rounded-full h-2 mb-4">
+                        <div class="bg-gradient-to-r from-red-500 to-purple-500 h-2 rounded-full transition-all duration-500" id="humedad-bar"></div>
+                    </div>
+                    <div class="text-sm text-white">
+                        <div class="flex justify-between items-center">
+                            <span>Valor Actual del ESP32</span>
+                            <span id="humedad-timestamp">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sensor Flujo -->
+                <div class="glass-effect rounded-xl p-6 relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-4xl">💧</div>
+                        <button onclick="abrirHistorial()" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors">
+                            Historial
+                        </button>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Sensor Flujo Ariete</h3>
+                    <div id="flujo-value" class="text-4xl font-bold text-red-400 mb-4">--</div>
+                    <div class="text-sm text-white">
+                        <div class="flex justify-between items-center">
+                            <span>Valor Actual del ESP32</span>
+                            <span id="flujo-timestamp">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sensor Nivel -->
+                <div class="glass-effect rounded-xl p-6 relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-4xl">🛢️</div>
+                        <button onclick="abrirHistorial()" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors">
+                            Historial
+                        </button>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Sensor Nivel Ariete</h3>
+                    <div id="nivel-value" class="text-4xl font-bold text-red-400 mb-4">--</div>
+                    <div class="text-sm text-white">
+                        <div class="flex justify-between items-center">
+                            <span>Valor Actual del ESP32</span>
+                            <span id="nivel-timestamp">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="glass-effect rounded-xl p-4 text-center">
+                <div class="text-white text-sm mb-4">
+                    <span class="font-semibold">Sensores Ariete: 3</span> | 
+                    <span>Última actualización: <span id="last-update">--</span></span> | 
+                    <span>Frontend: <a href="#" class="text-blue-300 hover:underline">https://dashboard-ariete-ju4obxqbz-ariel-celico-lopez-de-leons-projects.vercel.app</a></span> | 
+                    <span>Autor: Ariel Celico López de León</span>
+                </div>
+                <button class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    ❓ ¿Qué es un Ariete Hidráulico?
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://backend-ariete.onrender.com';
+
+        // Función para abrir historial
+        function abrirHistorial() {
+            window.open('HISTORIAL_FUNCIONANDO.html', '_blank');
+        }
+
+        // Función para obtener datos del estado
+        async function obtenerDatos() {
+            try {
+                const response = await fetch(`${API_BASE}/api/estado`);
+                const data = await response.json();
+                
+                // Actualizar humedad
+                document.getElementById('humedad-value').textContent = `${data.humedad}%`;
+                document.getElementById('humedad-bar').style.width = `${data.humedad}%`;
+                document.getElementById('humedad-timestamp').textContent = new Date(data.timestamp).toLocaleTimeString();
+                
+                // Actualizar flujo
+                document.getElementById('flujo-value').textContent = `${data.flujo} L/min`;
+                document.getElementById('flujo-timestamp').textContent = new Date(data.timestamp).toLocaleTimeString();
+                
+                // Actualizar nivel
+                document.getElementById('nivel-value').textContent = `${data.nivel}%`;
+                document.getElementById('nivel-timestamp').textContent = new Date(data.timestamp).toLocaleTimeString();
+                
+                // Actualizar timestamp general
+                document.getElementById('last-update').textContent = new Date(data.timestamp).toLocaleTimeString();
+                
+            } catch (error) {
+                console.error('Error al obtener datos:', error);
+            }
+        }
+
+        // Actualizar datos cada 5 segundos
+        obtenerDatos();
+        setInterval(obtenerDatos, 5000);
+    </script>
+</body>
+</html>
