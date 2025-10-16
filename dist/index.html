@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Ariete Inteligente CON HISTORIAL</title>
+    <title>Dashboard Ariete Inteligente - ACTUALIZADO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -28,6 +28,7 @@
                 <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">
                     DASHBOARD ARIETE INTELIGENTE CON MICROSERVICIOS E IOT (INTERNET DE LAS COSAS)
                 </h1>
+                <p class="text-white text-xl drop-shadow">ACTUALIZADO - Sin botones Historial en sensores</p>
             </div>
 
             <!-- BOTÓN PRINCIPAL DE HISTORIAL -->
@@ -38,7 +39,7 @@
                 <p class="text-white mt-4 text-xl drop-shadow">Se abrirá el historial completo en una nueva pestaña</p>
             </div>
 
-            <!-- Sensor Cards -->
+            <!-- Sensor Cards SIN BOTONES HISTORIAL -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <!-- Sensor Humedad -->
                 <div class="glass-effect rounded-xl p-6">
@@ -121,6 +122,9 @@
         // Actualizar datos cada 5 segundos
         obtenerDatos();
         setInterval(obtenerDatos, 5000);
+        
+        // Forzar actualización de caché
+        console.log('Dashboard actualizado - Sin botones Historial en sensores');
     </script>
 </body>
 </html>
