@@ -93,7 +93,7 @@ const Dashboard = () => {
           <div key={index} className="relative">
             <SensorCard {...sensor} />
             <button
-              onClick={() => obtenerHistorial(['humedad', 'flujo', 'nivel'][index])}
+              onClick={() => window.open('HISTORIAL_FUNCIONANDO.html', '_blank')}
               className="absolute top-3 right-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
             >
               📊 Historial
@@ -105,11 +105,12 @@ const Dashboard = () => {
       {/* Botón principal de historial */}
       <div className="text-center mt-8">
         <button
-          onClick={() => obtenerHistorial('humedad')}
+          onClick={() => window.open('HISTORIAL_FUNCIONANDO.html', '_blank')}
           className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-8 py-4 rounded-xl text-lg font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
         >
           📊 Ver Historial Completo del Sistema
         </button>
+        <p className="text-gray-600 mt-2 text-sm">Se abrirá en una nueva pestaña</p>
       </div>
 
       {/* Modal de historial mejorado */}
