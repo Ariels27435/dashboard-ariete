@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const Sensor = require('./models/Sensor');
 
 // Cargar variables de entorno
 dotenv.config();
@@ -69,6 +70,37 @@ app.get('/api/health', (req, res) => {
     message: 'Servidor funcionando correctamente',
     timestamp: new Date().toISOString()
   });
+});
+
+// Ruta para obtener estado actual de los sensores del ariete (compatible con dashboard)
+app.get('/api/estado', async (req, res) => {
+  try {
+    // Buscar los sensores del ariete por nombre
+    const sensorHumedad = await Sensor.findOne({ nombre: 'Sensor Humedad Ariete' });
+    const sensorFlujo = await Sensor.findOne({ nombre: 'Sensor Flujo Ariete' });
+    const sensorNivel = await Sensor.findOne({ nombre: 'Sensor Nivel Ariete' });
+
+    res.json({
+      humedad: sensorHumedad?.ultimaLectura?.valor || 0,
+      flujo: sensorFlujo?.ultimaLectura?.valor || 0,
+      nivel: sensorNivel?.ultimaLectura?.valor || 0,
+      timestamp: new Date(),
+      sensores: {
+        humedad: { timestamp: sensorHumedad?.ultimaLectura?.timestamp || null },
+        flujo: { timestamp: sensorFlujo?.ultimaLectura?.timestamp || null },
+        nivel: { timestamp: sensorNivel?.ultimaLectura?.timestamp || null }
+      }
+    });
+  } catch (error) {
+    console.error('Error obteniendo estado:', error);
+    res.status(500).json({ 
+      message: 'Error interno del servidor',
+      humedad: 0,
+      flujo: 0,
+      nivel: 0,
+      timestamp: new Date()
+    });
+  }
 });
 
 // Middleware de manejo de errores
