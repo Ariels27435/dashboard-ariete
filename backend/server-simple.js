@@ -19,26 +19,41 @@ let datosSensores = {
   nivel: { valor: 0, timestamp: new Date() }
 };
 
-// Rutas ESP32 (como antes)
+// Rutas ESP32 (compatible con código original)
 app.post('/api/humedad', (req, res) => {
-  const { valor } = req.body;
-  datosSensores.humedad = { valor, timestamp: new Date() };
-  console.log(`📊 Humedad: ${valor}%`);
-  res.json({ success: true, mensaje: 'Datos de humedad guardados' });
+  const { humedad, valor } = req.body;
+  const valorHumedad = humedad !== undefined ? humedad : valor;
+  datosSensores.humedad = { valor: valorHumedad, timestamp: new Date() };
+  console.log(`🌫️ Humedad: ${valorHumedad}%`);
+  res.json({ 
+    message: 'Humedad recibida correctamente',
+    valor: valorHumedad,
+    unidad: '%'
+  });
 });
 
 app.post('/api/flujo', (req, res) => {
-  const { valor } = req.body;
-  datosSensores.flujo = { valor, timestamp: new Date() };
-  console.log(`💧 Flujo: ${valor} L/min`);
-  res.json({ success: true, mensaje: 'Datos de flujo guardados' });
+  const { flujo, valor } = req.body;
+  const valorFlujo = flujo !== undefined ? flujo : valor;
+  datosSensores.flujo = { valor: valorFlujo, timestamp: new Date() };
+  console.log(`💧 Flujo: ${valorFlujo} L/min`);
+  res.json({ 
+    message: 'Flujo recibido correctamente',
+    valor: valorFlujo,
+    unidad: 'L/min'
+  });
 });
 
 app.post('/api/nivel', (req, res) => {
-  const { valor } = req.body;
-  datosSensores.nivel = { valor, timestamp: new Date() };
-  console.log(`📈 Nivel: ${valor}%`);
-  res.json({ success: true, mensaje: 'Datos de nivel guardados' });
+  const { nivel, valor } = req.body;
+  const valorNivel = nivel !== undefined ? nivel : valor;
+  datosSensores.nivel = { valor: valorNivel, timestamp: new Date() };
+  console.log(`🛢️ Nivel: ${valorNivel}%`);
+  res.json({ 
+    message: 'Nivel recibido correctamente',
+    valor: valorNivel,
+    unidad: '%'
+  });
 });
 
 // Ruta para obtener datos actuales
@@ -71,4 +86,5 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`📊 Dashboard disponible en: http://localhost:${PORT}`);
   console.log(`✅ CORS configurado para permitir todos los orígenes`);
 });
+
 
