@@ -85,6 +85,17 @@ const Dashboard = () => {
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Dashboard Principal</h1>
         <p className="text-gray-600 mt-2">Monitoreo en tiempo real del sistema hidráulico</p>
+        
+        {/* Botón principal de historial */}
+        <div className="text-center mt-6">
+          <button
+            onClick={() => window.open('HISTORIAL_FUNCIONANDO.html', '_blank')}
+            className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-8 py-4 rounded-xl text-xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+          >
+            📊 VER HISTORIAL COMPLETO DEL SISTEMA
+          </button>
+          <p className="text-gray-500 mt-2 text-sm">Se abrirá en una nueva pestaña</p>
+        </div>
       </div>
 
       {/* Tarjetas de sensores */}
