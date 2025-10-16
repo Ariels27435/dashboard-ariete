@@ -60,32 +60,29 @@
         });
       }
 
-      // Crear tarjeta de sensor ORIGINAL SIN botón historial - CONFIRMADO
+      // Crear tarjeta de sensor EXACTO como imagen pero SIN botón historial
       function crearTarjetaSensor(sensor) {
         const porcentaje = Math.min(100, Math.max(0, sensor.value));
-        const colorBarra = sensor.color === 'red' ? 'from-red-400 to-red-600' : 
-                          sensor.color === 'yellow' ? 'from-yellow-400 to-yellow-600' :
-                          sensor.color === 'blue' ? 'from-blue-400 to-blue-600' :
-                          'from-green-400 to-green-600';
-
-        const statusColor = sensor.status === 'warning' ? 'text-orange-600' : 'text-green-600';
-        const statusIcon = sensor.status === 'warning' ? '▲ ALERTA' : '✔ OK';
+        
+        // Colores exactos como en la imagen
+        const colorBarra = 'from-red-400 via-orange-400 via-blue-400 to-purple-600';
+        
+        // Colores de texto exactos como en la imagen
+        let textColor = '';
+        if (sensor.title === 'Humedad') textColor = 'text-red-700';
+        else if (sensor.title === 'Flujo') textColor = 'text-orange-600';
+        else if (sensor.title === 'Nivel') textColor = 'text-red-700';
 
         return `
           <div class="bg-white bg-opacity-95 backdrop-blur-sm rounded-xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300">
             <div class="text-center">
               <div class="text-6xl mb-4">${sensor.icon}</div>
               <h2 class="text-xl font-bold text-gray-800 mb-2">Sensor ${sensor.title} Ariete</h2>
-              <div class="text-4xl font-bold mb-4 ${sensor.color === 'red' ? 'text-red-500' : sensor.color === 'yellow' ? 'text-yellow-500' : sensor.color === 'blue' ? 'text-blue-500' : 'text-green-500'}">
+              <div class="text-4xl font-bold mb-4 ${textColor}">
                 ${sensor.value} ${sensor.unit}
               </div>
-              ${sensor.unit === '%' && typeof sensor.value === 'number' ? `
-                <div class="w-full bg-gray-200 rounded-full h-3 mb-4">
-                  <div class="bg-gradient-to-r ${colorBarra} h-3 rounded-full transition-all duration-500" style="width: ${porcentaje}%"></div>
-                </div>
-              ` : ''}
-              <div class="text-sm font-semibold ${statusColor}">
-                ${statusIcon}
+              <div class="w-full bg-gray-200 rounded-full h-3 mb-4">
+                <div class="bg-gradient-to-r ${colorBarra} h-3 rounded-full transition-all duration-500" style="width: ${porcentaje}%"></div>
               </div>
             </div>
           </div>
