@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Ariete Inteligente CON HISTORIAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 2% auto;
+            padding: 0;
+            border: none;
+            width: 95%;
+            max-width: 1000px;
+            border-radius: 15px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .close {
+            color: #fff;
+            float: right;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            background: rgba(0,0,0,0.3);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .close:hover {
+            background: rgba(0,0,0,0.6);
+        }
+        .lectura {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+        .lectura:hover {
+            background-color: #f8fafc;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .btn-historial {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn-historial:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        .sensor-card {
+            position: relative;
+            transition: all 0.3s;
+        }
+        .sensor-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen p-6">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">
+                    DASHBOARD ARIETE INTELIGENTE CON MICROSERVICIOS E IOT (INTERNET DE LAS COSAS)
+                </h1>
+                <p class="text-white text-xl drop-shadow">Monitoreo en tiempo real con historial completo</p>
+            </div>
+
+            <!-- Estado del Sistema -->
+            <div class="glass-effect rounded-xl p-6 mb-8 text-center">
+                <h2 class="text-2xl font-bold text-white mb-4">🔍 Estado del Sistema</h2>
+                <div id="estado-sistema" class="text-white">
+                    <div class="animate-spin inline-block w-6 h-6 border-2 border-white border-t-transparent rounded-full"></div>
+                    <span class="ml-2">Verificando estado...</span>
+                </div>
+            </div>
+
+            <!-- Sensor Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Sensor Humedad -->
+                <div class="glass-effect rounded-xl p-6 sensor-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-6xl">🌫️</div>
+                        <button onclick="verHistorial('humedad')" class="btn-historial">
+                            📊 VER HISTORIAL
+                        </button>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Sensor Humedad Ariete</h3>
+                    <div id="humedad-actual" class="text-4xl font-bold text-red-400 mb-4">--</div>
+                    <div class="w-full bg-gray-300 rounded-full h-3 mb-4">
+                        <div class="bg-gradient-to-r from-red-500 to-purple-500 h-3 rounded-full transition-all duration-500" id="humedad-bar"></div>
+                    </div>
+                    <div class="text-white">
+                        <div class="flex justify-between items-center">
+                            <span>Valor Actual del ESP32</span>
+                            <span id="humedad-timestamp">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sensor Flujo -->
+                <div class="glass-effect rounded-xl p-6 sensor-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-6xl">💧</div>
+                        <button onclick="verHistorial('flujo')" class="btn-historial">
+                            📊 VER HISTORIAL
+                        </button>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Sensor Flujo Ariete</h3>
+                    <div id="flujo-actual" class="text-4xl font-bold text-red-400 mb-4">--</div>
+                    <div class="text-white">
+                        <div class="flex justify-between items-center">
+                            <span>Valor Actual del ESP32</span>
+                            <span id="flujo-timestamp">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sensor Nivel -->
+                <div class="glass-effect rounded-xl p-6 sensor-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-6xl">🛢️</div>
+                        <button onclick="verHistorial('nivel')" class="btn-historial">
+                            📊 VER HISTORIAL
+                        </button>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Sensor Nivel Ariete</h3>
+                    <div id="nivel-actual" class="text-4xl font-bold text-red-400 mb-4">--</div>
+                    <div class="text-white">
+                        <div class="flex justify-between items-center">
+                            <span>Valor Actual del ESP32</span>
+                            <span id="nivel-timestamp">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón Principal de Historial -->
+            <div class="text-center mb-8">
+                <button onclick="verHistorial('humedad')" class="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-12 py-4 rounded-xl text-2xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+                    📊 VER HISTORIAL COMPLETO DEL SISTEMA
+                </button>
+            </div>
+
+            <!-- Footer -->
+            <div class="glass-effect rounded-xl p-4 text-center">
+                <div class="text-white text-sm mb-4">
+                    <span class="font-semibold">Sensores Ariete: 3</span> | 
+                    <span>Última actualización: <span id="ultima-actualizacion">--</span></span> | 
+                    <span>Frontend: <a href="#" class="text-blue-300 hover:underline">https://dashboard-ariete-ju4obxqbz-ariel-celico-lopez-de-leons-projects.vercel.app</a></span> | 
+                    <span>Autor: Ariel Celico López de León</span>
+                </div>
+                <button class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    ❓ ¿Qué es un Ariete Hidráulico?
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Historial -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 id="modal-title" class="text-3xl font-bold">📊 Historial Completo</h2>
+                        <p class="text-blue-100 mt-1">Datos históricos del sistema Ariete Hidráulico</p>
+                    </div>
+                    <span class="close" onclick="cerrarModal()">&times;</span>
+                </div>
+            </div>
+            <div class="p-6" id="modal-body">
+                <div class="text-center py-12">
+                    <div class="animate-spin inline-block w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full mb-4"></div>
+                    <p class="text-xl text-gray-600">Cargando historial...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://backend-ariete.onrender.com';
+        let currentSensor = null;
+
+        // Función para verificar estado del sistema
+        async function verificarEstado() {
+            try {
+                const response = await fetch(`${API_BASE}/api/health`);
+                const data = await response.json();
+                
+                document.getElementById('estado-sistema').innerHTML = `
+                    <div class="text-green-400">
+                        <div class="text-2xl font-bold">✅ SISTEMA FUNCIONANDO</div>
+                        <div class="text-lg">Versión: ${data.version}</div>
+                        <div class="text-lg">Total lecturas guardadas:</div>
+                        <div class="grid grid-cols-3 gap-4 mt-4">
+                            <div class="bg-green-600 p-3 rounded-lg">
+                                <div class="font-bold">🌫️ Humedad</div>
+                                <div class="text-2xl">${data.total_lecturas.humedad}</div>
+                            </div>
+                            <div class="bg-blue-600 p-3 rounded-lg">
+                                <div class="font-bold">💧 Flujo</div>
+                                <div class="text-2xl">${data.total_lecturas.flujo}</div>
+                            </div>
+                            <div class="bg-purple-600 p-3 rounded-lg">
+                                <div class="font-bold">🛢️ Nivel</div>
+                                <div class="text-2xl">${data.total_lecturas.nivel}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Actualizar valores actuales
+                await obtenerDatosActuales();
+                
+            } catch (error) {
+                document.getElementById('estado-sistema').innerHTML = `
+                    <div class="text-red-400">
+                        <div class="text-2xl font-bold">❌ ERROR DE CONEXIÓN</div>
+                        <div class="text-lg">${error.message}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Función para obtener datos actuales
+        async function obtenerDatosActuales() {
+            try {
+                const response = await fetch(`${API_BASE}/api/estado`);
+                const data = await response.json();
+                
+                document.getElementById('humedad-actual').textContent = `${data.humedad}%`;
+                document.getElementById('humedad-bar').style.width = `${data.humedad}%`;
+                document.getElementById('flujo-actual').textContent = `${data.flujo} L/min`;
+                document.getElementById('nivel-actual').textContent = `${data.nivel}%`;
+                
+                const timestamp = new Date(data.timestamp).toLocaleTimeString();
+                document.getElementById('humedad-timestamp').textContent = timestamp;
+                document.getElementById('flujo-timestamp').textContent = timestamp;
+                document.getElementById('nivel-timestamp').textContent = timestamp;
+                document.getElementById('ultima-actualizacion').textContent = new Date(data.timestamp).toLocaleString();
+                
+            } catch (error) {
+                console.error('Error al obtener datos:', error);
+            }
+        }
+
+        // Función para ver historial
+        async function verHistorial(sensor) {
+            currentSensor = sensor;
+            document.getElementById('modal').style.display = 'block';
+            document.getElementById('modal-title').textContent = `📊 Historial Completo - Sensor ${sensor.charAt(0).toUpperCase() + sensor.slice(1)}`;
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/historial/${sensor}?limite=50&horas=24`);
+                const data = await response.json();
+                
+                const unidad = sensor === 'flujo' ? ' L/min' : ' %';
+                const emoji = sensor === 'humedad' ? '🌫️' : sensor === 'flujo' ? '💧' : '🛢️';
+                
+                let html = `
+                    <div class="stats">
+                        <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <div class="text-sm">Total Lecturas</div>
+                            <div class="text-3xl font-bold">${data.total_lecturas}</div>
+                        </div>
+                        <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            <div class="text-sm">Período</div>
+                            <div class="text-3xl font-bold">${data.periodo_horas}h</div>
+                        </div>
+                        <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <div class="text-sm">Mostrando</div>
+                            <div class="text-3xl font-bold">${data.lecturas_filtradas}</div>
+                        </div>
+                        <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                            <div class="text-sm">Actualizado</div>
+                            <div class="text-lg font-bold">${new Date(data.timestamp).toLocaleTimeString()}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h3 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
+                            ${emoji} Últimas Lecturas (${data.datos?.length || 0} registros)
+                        </h3>
+                        
+                        <div class="max-h-96 overflow-y-auto bg-white rounded-lg">
+                `;
+
+                if (data.datos && data.datos.length > 0) {
+                    data.datos.slice(-20).reverse().forEach((lectura, index) => {
+                        const fecha = new Date(lectura.timestamp).toLocaleString();
+                        const esPar = index % 2 === 0;
+                        const bgColor = esPar ? 'bg-white' : 'bg-gray-50';
+                        
+                        html += `
+                            <div class="${bgColor} lectura">
+                                <div class="flex items-center space-x-4">
+                                    <div class="text-2xl font-bold text-blue-600">
+                                        ${lectura.valor}${unidad}
+                                    </div>
+                                    <div class="text-gray-600">
+                                        Lectura #${data.datos.length - index}
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-500">
+                                    ${fecha}
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += '<div class="text-center py-12 text-gray-500"><div class="text-6xl mb-4">📊</div><p class="text-xl">No hay datos históricos disponibles</p></div>';
+                }
+
+                html += `
+                        </div>
+                        <div class="mt-6 text-center">
+                            <button onclick="verHistorial('${sensor}')" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg mr-4">
+                                🔄 Actualizar
+                            </button>
+                            <button onclick="cerrarModal()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg">
+                                Cerrar
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('modal-body').innerHTML = html;
+                
+            } catch (error) {
+                document.getElementById('modal-body').innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="text-red-500 text-6xl mb-4">❌</div>
+                        <h3 class="text-2xl font-bold text-red-600 mb-2">Error al cargar historial</h3>
+                        <p class="text-gray-600">${error.message}</p>
+                        <button onclick="cerrarModal()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mt-4">
+                            Cerrar
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Función para cerrar modal
+        function cerrarModal() {
+            document.getElementById('modal').style.display = 'none';
+            currentSensor = null;
+        }
+
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target == modal) {
+                cerrarModal();
+            }
+        }
+
+        // Inicializar
+        verificarEstado();
+        setInterval(verificarEstado, 10000); // Actualizar cada 10 segundos
+        setInterval(obtenerDatosActuales, 5000); // Actualizar datos cada 5 segundos
+    </script>
+</body>
+</html>
