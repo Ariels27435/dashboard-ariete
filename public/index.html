@@ -29,18 +29,18 @@
         <!-- Los sensores se cargarán aquí SIN botones historial -->
       </div>
 
-      <!-- Footer ORIGINAL -->
-      <div class="fixed bottom-0 left-0 right-0 bg-white bg-opacity-90 backdrop-blur-sm text-black p-4 text-center text-sm">
-        <div class="flex justify-center items-center space-x-4">
-          <span>Sensores Ariete: 3</span>
-          <span>|</span>
-          <span>Última actualización: <span id="timestamp"></span></span>
-          <span>|</span>
-          <span>Frontend: https://dashboard-ariete.vercel.app</span>
-          <span>|</span>
-          <span>Autor: Ariel Celico López de León</span>
-        </div>
-        <div class="mt-2">
+      <!-- Footer como en la imagen -->
+      <div class="fixed bottom-0 left-0 right-0 bg-white bg-opacity-90 backdrop-blur-sm text-black p-4 text-sm">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-4">
+            <span>Sensores Ariete: 3</span>
+            <span>|</span>
+            <span>Última actualización: <span id="timestamp"></span></span>
+            <span>|</span>
+            <span>Frontend: https://dashboard-ariete.vercel.app</span>
+            <span>|</span>
+            <span>Autor: Ariel Celico López de León</span>
+          </div>
           <button class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
             ❓ ¿Qué es un Ariete Hidráulico?
           </button>
@@ -101,7 +101,7 @@
               value: data.humedad ?? '--',
               unit: '%',
               status: data.humedad < 30 ? 'warning' : 'normal',
-              icon: '🌫️',
+              icon: '☁️', // Icono más realista como en la imagen
               color: data.humedad < 30 ? 'yellow' : 'green'
             },
             {
@@ -109,7 +109,7 @@
               value: data.flujo ?? '--',
               unit: 'L/min',
               status: 'normal',
-              icon: '💧',
+              icon: '💧', // Dos gotas como en la imagen
               color: 'blue'
             },
             {
@@ -117,7 +117,7 @@
               value: data.nivel ?? '--',
               unit: '%',
               status: data.nivel < 20 ? 'warning' : 'normal',
-              icon: '🏊',
+              icon: '🛢️', // Barril como en la imagen
               color: data.nivel < 20 ? 'red' : 'green'
             }
           ];
