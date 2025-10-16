@@ -82,9 +82,10 @@ app.get('/api/health', (req, res) => {
 
 // Iniciar servidor
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Servidor ejecutándose en puerto ${PORT}`);
+  console.log(`🚀 Servidor SIMPLE ejecutándose en puerto ${PORT}`);
   console.log(`📊 Dashboard disponible en: http://localhost:${PORT}`);
   console.log(`✅ CORS configurado para permitir todos los orígenes`);
+  console.log(`🔥 Sistema SIMPLE activo - Sin MongoDB, datos en memoria`);
 });
 
 
