@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Ariete Inteligente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('background-image.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 8px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+        .lectura {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen p-6">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">
+                    DASHBOARD ARIETE INTELIGENTE CON MICROSERVICIOS E IOT (INTERNET DE LAS COSAS)
+                </h1>
+            </div>
+
+            <!-- Sensor Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Sensor Humedad -->
+                <div class="glass-effect rounded-xl p-6 relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-4xl">🌫️</div>
+                        <button id="btn-historial-humedad" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            📊 Historial
+                        </button>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Sensor Humedad Ariete</h3>
+                    <div class="text-4xl font-bold text-red-400 mb-4" id="humedad-value">--</div>
+                    <div class="w-full bg-gray-300 rounded-full h-2 mb-4">
+                        <div class="bg-gradient-to-r from-red-500 to-purple-500 h-2 rounded-full transition-all duration-500" id="humedad-bar"></div>
+                    </div>
+                    <div class="text-sm text-white">
+                        <div class="flex justify-between items-center">
+                            <span>Valor Actual del ESP32</span>
+                            <span id="humedad-timestamp">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sensor Flujo -->
+                <div class="glass-effect rounded-xl p-6 relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-4xl">💧</div>
+                        <button id="btn-historial-flujo" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            📊 Historial
+                        </button>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Sensor Flujo Ariete</h3>
+                    <div class="text-4xl font-bold text-red-400 mb-4" id="flujo-value">--</div>
+                    <div class="text-sm text-white">
+                        <div class="flex justify-between items-center">
+                            <span>Valor Actual del ESP32</span>
+                            <span id="flujo-timestamp">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sensor Nivel -->
+                <div class="glass-effect rounded-xl p-6 relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-4xl">🛢️</div>
+                        <button id="btn-historial-nivel" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            📊 Historial
+                        </button>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">Sensor Nivel Ariete</h3>
+                    <div class="text-4xl font-bold text-red-400 mb-4" id="nivel-value">--</div>
+                    <div class="text-sm text-white">
+                        <div class="flex justify-between items-center">
+                            <span>Valor Actual del ESP32</span>
+                            <span id="nivel-timestamp">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="glass-effect rounded-xl p-4 text-center">
+                <div class="text-white text-sm mb-4">
+                    <span class="font-semibold">Sensores Ariete: 3</span> | 
+                    <span>Última actualización: <span id="last-update">--</span></span> | 
+                    <span>Frontend: <a href="#" class="text-blue-300 hover:underline">https://dashboard-ariete-ju4obxqbz-ariel-celico-lopez-de-leons-projects.vercel.app</a></span> | 
+                    <span>Autor: Ariel Celico López de León</span>
+                </div>
+                <button class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    ❓ ¿Qué es un Ariete Hidráulico?
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Historial -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarModal()">&times;</span>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://backend-ariete.onrender.com';
+        let currentSensor = null;
+
+        // Función para obtener datos del estado
+        async function obtenerDatos() {
+            try {
+                const response = await fetch(`${API_BASE}/api/estado`);
+                const data = await response.json();
+                
+                // Actualizar humedad
+                document.getElementById('humedad-value').textContent = `${data.humedad}%`;
+                document.getElementById('humedad-bar').style.width = `${data.humedad}%`;
+                document.getElementById('humedad-timestamp').textContent = new Date(data.timestamp).toLocaleTimeString();
+                
+                // Actualizar flujo
+                document.getElementById('flujo-value').textContent = `${data.flujo} L/min`;
+                document.getElementById('flujo-timestamp').textContent = new Date(data.timestamp).toLocaleTimeString();
+                
+                // Actualizar nivel
+                document.getElementById('nivel-value').textContent = `${data.nivel}%`;
+                document.getElementById('nivel-timestamp').textContent = new Date(data.timestamp).toLocaleTimeString();
+                
+                // Actualizar timestamp general
+                document.getElementById('last-update').textContent = new Date(data.timestamp).toLocaleTimeString();
+                
+            } catch (error) {
+                console.error('Error al obtener datos:', error);
+            }
+        }
+
+        // Función para mostrar historial
+        async function mostrarHistorial(sensor) {
+            try {
+                const response = await fetch(`${API_BASE}/api/historial/${sensor}?limite=20&horas=24`);
+                const data = await response.json();
+                
+                let html = `
+                    <h2 class="text-2xl font-bold mb-4">📊 Historial - Sensor ${sensor.charAt(0).toUpperCase() + sensor.slice(1)}</h2>
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div><strong>Total Lecturas</strong></div>
+                            <div class="text-xl">${data.total_lecturas}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div><strong>Período</strong></div>
+                            <div class="text-xl">${data.periodo_horas}h</div>
+                        </div>
+                        <div class="stat-card">
+                            <div><strong>Mostrando</strong></div>
+                            <div class="text-xl">${data.lecturas_filtradas}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div><strong>Actualizado</strong></div>
+                            <div class="text-sm">${new Date(data.timestamp).toLocaleTimeString()}</div>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-4">📋 Últimas Lecturas:</h3>
+                    <div class="max-h-64 overflow-y-auto">
+                `;
+
+                if (data.datos && data.datos.length > 0) {
+                    data.datos.slice(-10).reverse().forEach(lectura => {
+                        const fecha = new Date(lectura.timestamp).toLocaleString();
+                        const unidad = sensor === 'flujo' ? ' L/min' : ' %';
+                        html += `
+                            <div class="lectura">
+                                <span><strong>${lectura.valor}${unidad}</strong></span>
+                                <span class="text-gray-500">${fecha}</span>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += '<div class="text-center text-gray-500 py-4">No hay datos históricos disponibles</div>';
+                }
+
+                html += '</div>';
+
+                document.getElementById('modal-content').innerHTML = html;
+                document.getElementById('modal').style.display = 'block';
+                currentSensor = sensor;
+                
+            } catch (error) {
+                alert('Error al obtener historial: ' + error.message);
+            }
+        }
+
+        // Función para cerrar modal
+        function cerrarModal() {
+            document.getElementById('modal').style.display = 'none';
+            currentSensor = null;
+        }
+
+        // Event listeners para los botones de historial
+        document.getElementById('btn-historial-humedad').addEventListener('click', () => mostrarHistorial('humedad'));
+        document.getElementById('btn-historial-flujo').addEventListener('click', () => mostrarHistorial('flujo'));
+        document.getElementById('btn-historial-nivel').addEventListener('click', () => mostrarHistorial('nivel'));
+
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target == modal) {
+                cerrarModal();
+            }
+        }
+
+        // Actualizar datos cada 5 segundos
+        obtenerDatos();
+        setInterval(obtenerDatos, 5000);
+    </script>
+</body>
+</html>
