@@ -41,60 +41,33 @@
             <!-- Sensor Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <!-- Sensor Humedad -->
-                <div class="glass-effect rounded-xl p-6 relative">
-                    <div class="flex items-center justify-between mb-4">
+                <div class="glass-effect rounded-xl p-6">
+                    <div class="flex items-center mb-4">
                         <div class="text-4xl">🌫️</div>
-                        <button onclick="abrirHistorial()" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors">
-                            Historial
-                        </button>
                     </div>
                     <h3 class="text-xl font-semibold text-white mb-2">Sensor Humedad Ariete</h3>
                     <div id="humedad-value" class="text-4xl font-bold text-red-400 mb-4">--</div>
                     <div class="w-full bg-gray-300 rounded-full h-2 mb-4">
                         <div class="bg-gradient-to-r from-red-500 to-purple-500 h-2 rounded-full transition-all duration-500" id="humedad-bar"></div>
                     </div>
-                    <div class="text-sm text-white">
-                        <div class="flex justify-between items-center">
-                            <span>Valor Actual del ESP32</span>
-                            <span id="humedad-timestamp">--</span>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Sensor Flujo -->
-                <div class="glass-effect rounded-xl p-6 relative">
-                    <div class="flex items-center justify-between mb-4">
+                <div class="glass-effect rounded-xl p-6">
+                    <div class="flex items-center mb-4">
                         <div class="text-4xl">💧</div>
-                        <button onclick="abrirHistorial()" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors">
-                            Historial
-                        </button>
                     </div>
                     <h3 class="text-xl font-semibold text-white mb-2">Sensor Flujo Ariete</h3>
                     <div id="flujo-value" class="text-4xl font-bold text-red-400 mb-4">--</div>
-                    <div class="text-sm text-white">
-                        <div class="flex justify-between items-center">
-                            <span>Valor Actual del ESP32</span>
-                            <span id="flujo-timestamp">--</span>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Sensor Nivel -->
-                <div class="glass-effect rounded-xl p-6 relative">
-                    <div class="flex items-center justify-between mb-4">
+                <div class="glass-effect rounded-xl p-6">
+                    <div class="flex items-center mb-4">
                         <div class="text-4xl">🛢️</div>
-                        <button onclick="abrirHistorial()" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors">
-                            Historial
-                        </button>
                     </div>
                     <h3 class="text-xl font-semibold text-white mb-2">Sensor Nivel Ariete</h3>
                     <div id="nivel-value" class="text-4xl font-bold text-red-400 mb-4">--</div>
-                    <div class="text-sm text-white">
-                        <div class="flex justify-between items-center">
-                            <span>Valor Actual del ESP32</span>
-                            <span id="nivel-timestamp">--</span>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -130,15 +103,12 @@
                 // Actualizar humedad
                 document.getElementById('humedad-value').textContent = `${data.humedad}%`;
                 document.getElementById('humedad-bar').style.width = `${data.humedad}%`;
-                document.getElementById('humedad-timestamp').textContent = new Date(data.timestamp).toLocaleTimeString();
                 
                 // Actualizar flujo
                 document.getElementById('flujo-value').textContent = `${data.flujo} L/min`;
-                document.getElementById('flujo-timestamp').textContent = new Date(data.timestamp).toLocaleTimeString();
                 
                 // Actualizar nivel
                 document.getElementById('nivel-value').textContent = `${data.nivel}%`;
-                document.getElementById('nivel-timestamp').textContent = new Date(data.timestamp).toLocaleTimeString();
                 
                 // Actualizar timestamp general
                 document.getElementById('last-update').textContent = new Date(data.timestamp).toLocaleTimeString();
