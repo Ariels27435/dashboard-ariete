@@ -1,14 +1,134 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ariete Dashboard</title>
-    <script type="module" crossorigin src="/assets/index-crt88jv1.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-D692pYOk.css">
+    <title>Dashboard Ariete Inteligente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: 'Arial', sans-serif;
+      }
+      .sensor-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div class="min-h-screen p-6">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-white mb-2">DASHBOARD ARIETE INTELIGENTE</h1>
+        <p class="text-blue-100 text-lg">Monitoreo en tiempo real del sistema hidráulico</p>
+      </div>
+
+      <!-- Tarjetas de sensores SIN BOTONES HISTORIAL -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto" id="sensores">
+        <!-- Los sensores se cargarán aquí SIN botones historial -->
+      </div>
+
+      <!-- Footer -->
+      <div class="fixed bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4 text-center text-sm">
+        <p>Última actualización: <span id="timestamp"></span></p>
+        <p class="text-xs mt-1">Sensores Ariete: 3 | Frontend: https://dashboard-ariete.vercel.app | Autor: Ariel Celico López de León</p>
+      </div>
+    </div>
+
+    <script>
+      // Actualizar timestamp
+      function actualizarTimestamp() {
+        document.getElementById('timestamp').textContent = new Date().toLocaleTimeString();
+      }
+
+      // Crear tarjeta de sensor SIN botón historial
+      function crearTarjetaSensor(sensor) {
+        const porcentaje = Math.min(100, Math.max(0, sensor.value));
+        const colorBarra = sensor.color === 'red' ? 'bg-red-500' : 
+                          sensor.color === 'yellow' ? 'bg-yellow-500' :
+                          sensor.color === 'blue' ? 'bg-blue-500' :
+                          'bg-green-500';
+
+        const statusColor = sensor.status === 'warning' ? 'text-yellow-600' : 'text-green-600';
+        const statusIcon = sensor.status === 'warning' ? '⚠️ ALERTA' : '✔️ OK';
+
+        return `
+          <div class="sensor-card rounded-xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300">
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-5xl">${sensor.icon}</div>
+              <div class="text-sm font-semibold ${statusColor}">
+                ${statusIcon}
+              </div>
+            </div>
+            
+            <h2 class="text-xl font-bold text-gray-800 mb-2">Sensor ${sensor.title}</h2>
+            <p class="text-3xl font-semibold text-gray-900 mb-4">
+              ${sensor.value} <span class="text-lg text-gray-500">${sensor.unit}</span>
+            </p>
+            
+            ${sensor.unit === '%' && typeof sensor.value === 'number' ? `
+              <div class="w-full bg-gray-200 rounded-full h-3">
+                <div class="h-3 rounded-full ${colorBarra} transition-all duration-500" style="width: ${porcentaje}%"></div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }
+
+      // Cargar datos de sensores
+      async function cargarDatos() {
+        try {
+          const response = await fetch('https://backend-ariete.onrender.com/api/estado');
+          const data = await response.json();
+          
+          const sensores = [
+            {
+              title: 'Humedad',
+              value: data.humedad ?? '--',
+              unit: '%',
+              status: data.humedad < 30 ? 'warning' : 'normal',
+              icon: '🌫️',
+              color: data.humedad < 30 ? 'yellow' : 'green'
+            },
+            {
+              title: 'Caudal de Agua',
+              value: data.flujo ?? '--',
+              unit: 'L/min',
+              status: 'normal',
+              icon: '💧',
+              color: 'blue'
+            },
+            {
+              title: 'Nivel de Agua',
+              value: data.nivel ?? '--',
+              unit: '%',
+              status: data.nivel < 20 ? 'warning' : 'normal',
+              icon: '🏊',
+              color: data.nivel < 20 ? 'red' : 'green'
+            }
+          ];
+
+          document.getElementById('sensores').innerHTML = sensores.map(crearTarjetaSensor).join('');
+          actualizarTimestamp();
+        } catch (error) {
+          console.error('Error al cargar datos:', error);
+          document.getElementById('sensores').innerHTML = `
+            <div class="col-span-3 text-center text-white">
+              <div class="text-6xl mb-4">⚠️</div>
+              <p class="text-xl">Error al conectar con el servidor</p>
+            </div>
+          `;
+        }
+      }
+
+      // Cargar datos inicial y cada 5 segundos
+      cargarDatos();
+      setInterval(cargarDatos, 5000);
+      setInterval(actualizarTimestamp, 1000);
+    </script>
   </body>
 </html>
