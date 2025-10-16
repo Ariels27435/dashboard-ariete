@@ -6,57 +6,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard Ariete Inteligente</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background-image: url('background-image.jpeg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
+        font-family: 'Arial', sans-serif;
+      }
+    </style>
   </head>
   <body>
-    <div class="p-6 space-y-6">
-      <div>
-        <h1 class="text-3xl font-bold text-gray-900">Dashboard Principal</h1>
-        <p class="text-gray-600 mt-2">Monitoreo en tiempo real del sistema hidráulico</p>
+    <div class="min-h-screen">
+      <!-- Header ORIGINAL -->
+      <div class="text-center pt-8 pb-6">
+        <h1 class="text-4xl font-bold text-white mb-2 drop-shadow-lg">DASHBOARD ARIETE INTELIGENTE CON MICROSERVICIOS E IOT (INTERNET DE LAS COSAS)</h1>
       </div>
 
-      <!-- Tarjetas de sensores SIN BOTONES HISTORIAL -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="sensores">
+      <!-- Tarjetas de sensores ORIGINALES SIN BOTONES HISTORIAL -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6" id="sensores">
         <!-- Los sensores se cargarán aquí SIN botones historial -->
+      </div>
+
+      <!-- Footer ORIGINAL -->
+      <div class="fixed bottom-0 left-0 right-0 bg-white bg-opacity-90 backdrop-blur-sm text-black p-4 text-center text-sm">
+        <div class="flex justify-center items-center space-x-4">
+          <span>Sensores Ariete: 3</span>
+          <span>|</span>
+          <span>Última actualización: <span id="timestamp"></span></span>
+          <span>|</span>
+          <span>Frontend: https://dashboard-ariete.vercel.app</span>
+          <span>|</span>
+          <span>Autor: Ariel Celico López de León</span>
+        </div>
+        <div class="mt-2">
+          <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+            ❓ ¿Qué es un Ariete Hidráulico?
+          </button>
+        </div>
       </div>
     </div>
 
     <script>
-      // Crear tarjeta de sensor SIN botón historial - DISEÑO ORIGINAL
+      // Actualizar timestamp
+      function actualizarTimestamp() {
+        const now = new Date();
+        document.getElementById('timestamp').textContent = now.toLocaleTimeString('es-ES', { 
+          hour: '2-digit', 
+          minute: '2-digit', 
+          second: '2-digit',
+          hour12: true 
+        });
+      }
+
+      // Crear tarjeta de sensor ORIGINAL SIN botón historial
       function crearTarjetaSensor(sensor) {
-        const statusColor = sensor.status === 'warning'
-          ? 'border-yellow-400 bg-yellow-50'
-          : 'border-green-400 bg-white';
+        const porcentaje = Math.min(100, Math.max(0, sensor.value));
+        const colorBarra = sensor.color === 'red' ? 'from-red-400 to-red-600' : 
+                          sensor.color === 'yellow' ? 'from-yellow-400 to-yellow-600' :
+                          sensor.color === 'blue' ? 'from-blue-400 to-blue-600' :
+                          'from-green-400 to-green-600';
 
-        const textColor = sensor.status === 'warning'
-          ? 'text-yellow-600'
-          : 'text-green-600';
-
-        const bgColorMap = {
-          blue: 'bg-blue-500',
-          green: 'bg-green-500',
-          red: 'bg-red-500',
-          gray: 'bg-gray-500'
-        };
+        const statusColor = sensor.status === 'warning' ? 'text-orange-600' : 'text-green-600';
+        const statusIcon = sensor.status === 'warning' ? '▲ ALERTA' : '✔ OK';
 
         return `
-          <div class="p-4 rounded-xl shadow-md border-l-4 ${statusColor} transition-all duration-300 hover:shadow-lg">
-            <div class="flex items-center justify-between mb-2">
-              <div class="text-4xl">${sensor.icon}</div>
-              <div class="text-sm font-semibold ${textColor}">
-                ${sensor.status === 'warning' ? '⚠️ ALERTA' : '✔️ OK'}
+          <div class="bg-white bg-opacity-95 backdrop-blur-sm rounded-xl shadow-xl p-6 transform hover:scale-105 transition-all duration-300">
+            <div class="text-center">
+              <div class="text-6xl mb-4">${sensor.icon}</div>
+              <h2 class="text-xl font-bold text-gray-800 mb-2">Sensor ${sensor.title} Ariete</h2>
+              <div class="text-4xl font-bold mb-4 ${sensor.color === 'red' ? 'text-red-500' : sensor.color === 'yellow' ? 'text-yellow-500' : sensor.color === 'blue' ? 'text-blue-500' : 'text-green-500'}">
+                ${sensor.value} ${sensor.unit}
+              </div>
+              ${sensor.unit === '%' && typeof sensor.value === 'number' ? `
+                <div class="w-full bg-gray-200 rounded-full h-3 mb-4">
+                  <div class="bg-gradient-to-r ${colorBarra} h-3 rounded-full transition-all duration-500" style="width: ${porcentaje}%"></div>
+                </div>
+              ` : ''}
+              <div class="text-sm font-semibold ${statusColor}">
+                ${statusIcon}
               </div>
             </div>
-
-            <h2 class="text-xl font-bold text-gray-800">${sensor.title}</h2>
-            <p class="text-3xl font-semibold text-gray-900">
-              ${sensor.value} <span class="text-lg text-gray-500">${sensor.unit}</span>
-            </p>
-
-            ${sensor.unit === '%' && typeof sensor.value === 'number' ? `
-              <div class="w-full bg-gray-200 rounded-full h-2 mt-4">
-                <div class="h-2 rounded-full ${bgColorMap[sensor.color] || 'bg-gray-500'}" style="width: ${sensor.value}%"></div>
-              </div>
-            ` : ''}
           </div>
         `;
       }
@@ -77,7 +108,7 @@
               color: data.humedad < 30 ? 'yellow' : 'green'
             },
             {
-              title: 'Caudal de Agua',
+              title: 'Flujo',
               value: data.flujo ?? '--',
               unit: 'L/min',
               status: 'normal',
@@ -85,7 +116,7 @@
               color: 'blue'
             },
             {
-              title: 'Nivel de Agua',
+              title: 'Nivel',
               value: data.nivel ?? '--',
               unit: '%',
               status: data.nivel < 20 ? 'warning' : 'normal',
@@ -95,11 +126,13 @@
           ];
 
           document.getElementById('sensores').innerHTML = sensores.map(crearTarjetaSensor).join('');
+          actualizarTimestamp();
         } catch (error) {
           console.error('Error al cargar datos:', error);
           document.getElementById('sensores').innerHTML = `
-            <div class="col-span-3 text-center text-gray-600">
-              <p>Error al conectar con el servidor</p>
+            <div class="col-span-3 text-center text-white">
+              <div class="text-6xl mb-4">⚠️</div>
+              <p class="text-xl">Error al conectar con el servidor</p>
             </div>
           `;
         }
@@ -108,6 +141,7 @@
       // Cargar datos inicial y cada 5 segundos
       cargarDatos();
       setInterval(cargarDatos, 5000);
+      setInterval(actualizarTimestamp, 1000);
     </script>
   </body>
 </html>
