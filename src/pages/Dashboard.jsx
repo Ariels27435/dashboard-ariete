@@ -45,31 +45,21 @@ const Dashboard = () => {
     return () => clearInterval(intervalo);
   }, []);
 
+
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 text-center">
-        <h1 className="text-4xl font-bold mb-2">DASHBOARD ARIETE INTELIGENTE</h1>
-        <p className="text-blue-100">Monitoreo en tiempo real del sistema hidráulico</p>
+    <div className="p-6 space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900">Dashboard Principal</h1>
+        <p className="text-gray-600 mt-2">Monitoreo en tiempo real del sistema hidráulico</p>
       </div>
 
-      {/* Contenido principal centrado */}
-      <div className="flex-1 flex items-center justify-center p-6">
-        <div className="w-full max-w-6xl">
-          {/* Tarjetas de sensores */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {sensorData.map((sensor, index) => (
-              <div key={index} className="flex justify-center">
-                <SensorCard {...sensor} />
-              </div>
-            ))}
+      {/* Tarjetas de sensores */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {sensorData.map((sensor, index) => (
+          <div key={index}>
+            <SensorCard {...sensor} />
           </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="bg-gray-800 text-white p-4 text-center text-sm">
-        <p>Última actualización: {new Date().toLocaleTimeString()}</p>
+        ))}
       </div>
     </div>
   );
