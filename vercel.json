@@ -1,7 +1,18 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "echo 'SIN BOTONES HISTORIAL - VERSION LIMPIA'",
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate, max-age=0"
+        }
+      ]
+    }
   ]
 }
