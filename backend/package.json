@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node server-simple.js",
+    "start": "node backend/server-simple.js",
     "dev": "nodemon server-simple.js",
     "dev-mock": "nodemon server-mock.js",
     "init-data": "node scripts/initData.js",

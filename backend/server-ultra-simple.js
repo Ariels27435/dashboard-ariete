@@ -15,23 +15,41 @@ let datos = {
   nivel: 0
 };
 
-// Rutas ESP32
+// Rutas ESP32 (compatible con formato del ESP32)
 app.post('/api/humedad', (req, res) => {
-  datos.humedad = req.body.valor || 0;
-  console.log(`Humedad: ${datos.humedad}%`);
-  res.json({ success: true });
+  const { humedad, valor } = req.body;
+  const valorHumedad = humedad !== undefined ? humedad : valor;
+  datos.humedad = valorHumedad || 0;
+  console.log(`🌫️ Humedad: ${datos.humedad}%`);
+  res.json({ 
+    message: 'Humedad recibida correctamente',
+    valor: datos.humedad,
+    unidad: '%'
+  });
 });
 
 app.post('/api/flujo', (req, res) => {
-  datos.flujo = req.body.valor || 0;
-  console.log(`Flujo: ${datos.flujo} L/min`);
-  res.json({ success: true });
+  const { flujo, valor } = req.body;
+  const valorFlujo = flujo !== undefined ? flujo : valor;
+  datos.flujo = valorFlujo || 0;
+  console.log(`💧 Flujo: ${datos.flujo} L/min`);
+  res.json({ 
+    message: 'Flujo recibido correctamente',
+    valor: datos.flujo,
+    unidad: 'L/min'
+  });
 });
 
 app.post('/api/nivel', (req, res) => {
-  datos.nivel = req.body.valor || 0;
-  console.log(`Nivel: ${datos.nivel}%`);
-  res.json({ success: true });
+  const { nivel, valor } = req.body;
+  const valorNivel = nivel !== undefined ? nivel : valor;
+  datos.nivel = valorNivel || 0;
+  console.log(`🛢️ Nivel: ${datos.nivel}%`);
+  res.json({ 
+    message: 'Nivel recibido correctamente',
+    valor: datos.nivel,
+    unidad: '%'
+  });
 });
 
 // Ruta para obtener datos
@@ -51,6 +69,10 @@ app.get('/api/health', (req, res) => {
 
 // Iniciar servidor
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor en puerto ${PORT}`);
+  console.log(`🚀 Servidor ULTRA-SIMPLE ejecutándose en puerto ${PORT}`);
+  console.log(`🔥 Sistema ULTRA-SIMPLE activo - Sin MongoDB, datos en memoria`);
+  console.log(`📊 Dashboard disponible en: http://localhost:${PORT}`);
+  console.log(`✅ CORS configurado para permitir todos los orígenes`);
 });
+
 
