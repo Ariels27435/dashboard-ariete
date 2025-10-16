@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HISTORIAL ARIETE HIDRÁULICO - FUNCIONANDO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen p-6">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">
+                    📊 HISTORIAL ARIETE HIDRÁULICO - FUNCIONANDO
+                </h1>
+                <p class="text-white text-xl">Los datos se están guardando automáticamente desde el ESP32</p>
+            </div>
+
+            <!-- Estado del Sistema -->
+            <div class="glass-effect rounded-xl p-6 mb-8 text-center">
+                <h2 class="text-2xl font-bold text-white mb-4">🔍 Estado del Sistema</h2>
+                <div id="estado-sistema" class="text-white">
+                    <div class="animate-spin inline-block w-6 h-6 border-2 border-white border-t-transparent rounded-full"></div>
+                    <span class="ml-2">Verificando estado...</span>
+                </div>
+            </div>
+
+            <!-- Botones de Historial -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="glass-effect rounded-xl p-6 text-center">
+                    <div class="text-6xl mb-4">🌫️</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Sensor Humedad</h3>
+                    <div id="humedad-actual" class="text-3xl font-bold text-red-400 mb-4">--</div>
+                    <button onclick="verHistorial('humedad')" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-bold transition-colors w-full">
+                        📊 VER HISTORIAL COMPLETO
+                    </button>
+                    <div id="humedad-estado" class="text-white text-sm mt-2">Cargando...</div>
+                </div>
+
+                <div class="glass-effect rounded-xl p-6 text-center">
+                    <div class="text-6xl mb-4">💧</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Sensor Flujo</h3>
+                    <div id="flujo-actual" class="text-3xl font-bold text-red-400 mb-4">--</div>
+                    <button onclick="verHistorial('flujo')" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-bold transition-colors w-full">
+                        📊 VER HISTORIAL COMPLETO
+                    </button>
+                    <div id="flujo-estado" class="text-white text-sm mt-2">Cargando...</div>
+                </div>
+
+                <div class="glass-effect rounded-xl p-6 text-center">
+                    <div class="text-6xl mb-4">🛢️</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Sensor Nivel</h3>
+                    <div id="nivel-actual" class="text-3xl font-bold text-red-400 mb-4">--</div>
+                    <button onclick="verHistorial('nivel')" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-bold transition-colors w-full">
+                        📊 VER HISTORIAL COMPLETO
+                    </button>
+                    <div id="nivel-estado" class="text-white text-sm mt-2">Cargando...</div>
+                </div>
+            </div>
+
+            <!-- Área de Resultados -->
+            <div id="resultados" class="glass-effect rounded-xl p-6" style="display: none;">
+                <div id="contenido-resultados"></div>
+            </div>
+
+            <!-- Footer -->
+            <div class="glass-effect rounded-xl p-4 text-center mt-8">
+                <div class="text-white text-sm">
+                    <span class="font-semibold">Autor: Ariel Celico López de León</span> | 
+                    <span>Última actualización: <span id="ultima-actualizacion">--</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://backend-ariete.onrender.com';
+
+        // Función para verificar estado del sistema
+        async function verificarEstado() {
+            try {
+                const response = await fetch(`${API_BASE}/api/health`);
+                const data = await response.json();
+                
+                document.getElementById('estado-sistema').innerHTML = `
+                    <div class="text-green-400">
+                        <div class="text-2xl font-bold">✅ SISTEMA FUNCIONANDO</div>
+                        <div class="text-lg">Versión: ${data.version}</div>
+                        <div class="text-lg">Total lecturas guardadas:</div>
+                        <div class="grid grid-cols-3 gap-4 mt-4">
+                            <div class="bg-green-600 p-2 rounded">
+                                <div class="font-bold">Humedad</div>
+                                <div>${data.total_lecturas.humedad}</div>
+                            </div>
+                            <div class="bg-blue-600 p-2 rounded">
+                                <div class="font-bold">Flujo</div>
+                                <div>${data.total_lecturas.flujo}</div>
+                            </div>
+                            <div class="bg-purple-600 p-2 rounded">
+                                <div class="font-bold">Nivel</div>
+                                <div>${data.total_lecturas.nivel}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Actualizar valores actuales
+                await obtenerDatosActuales();
+                
+            } catch (error) {
+                document.getElementById('estado-sistema').innerHTML = `
+                    <div class="text-red-400">
+                        <div class="text-2xl font-bold">❌ ERROR DE CONEXIÓN</div>
+                        <div class="text-lg">${error.message}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Función para obtener datos actuales
+        async function obtenerDatosActuales() {
+            try {
+                const response = await fetch(`${API_BASE}/api/estado`);
+                const data = await response.json();
+                
+                document.getElementById('humedad-actual').textContent = `${data.humedad}%`;
+                document.getElementById('flujo-actual').textContent = `${data.flujo} L/min`;
+                document.getElementById('nivel-actual').textContent = `${data.nivel}%`;
+                
+                document.getElementById('ultima-actualizacion').textContent = new Date(data.timestamp).toLocaleString();
+                
+                // Actualizar estados
+                document.getElementById('humedad-estado').textContent = `Actualizado: ${new Date(data.timestamp).toLocaleTimeString()}`;
+                document.getElementById('flujo-estado').textContent = `Actualizado: ${new Date(data.timestamp).toLocaleTimeString()}`;
+                document.getElementById('nivel-estado').textContent = `Actualizado: ${new Date(data.timestamp).toLocaleTimeString()}`;
+                
+            } catch (error) {
+                console.error('Error al obtener datos:', error);
+            }
+        }
+
+        // Función para ver historial completo
+        async function verHistorial(sensor) {
+            try {
+                document.getElementById('resultados').style.display = 'block';
+                document.getElementById('contenido-resultados').innerHTML = `
+                    <div class="text-center">
+                        <div class="animate-spin inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full"></div>
+                        <div class="text-white text-lg mt-2">Cargando historial de ${sensor}...</div>
+                    </div>
+                `;
+
+                const response = await fetch(`${API_BASE}/api/historial/${sensor}?limite=50&horas=24`);
+                const data = await response.json();
+                
+                const unidad = sensor === 'flujo' ? ' L/min' : ' %';
+                const emoji = sensor === 'humedad' ? '🌫️' : sensor === 'flujo' ? '💧' : '🛢️';
+                
+                let html = `
+                    <div class="text-center mb-6">
+                        <h2 class="text-3xl font-bold text-white mb-4">${emoji} HISTORIAL COMPLETO - ${sensor.toUpperCase()}</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-blue-600 p-4 rounded-lg text-center text-white">
+                            <div class="text-sm">Total Lecturas</div>
+                            <div class="text-2xl font-bold">${data.total_lecturas}</div>
+                        </div>
+                        <div class="bg-green-600 p-4 rounded-lg text-center text-white">
+                            <div class="text-sm">Período</div>
+                            <div class="text-2xl font-bold">${data.periodo_horas}h</div>
+                        </div>
+                        <div class="bg-purple-600 p-4 rounded-lg text-center text-white">
+                            <div class="text-sm">Mostrando</div>
+                            <div class="text-2xl font-bold">${data.lecturas_filtradas}</div>
+                        </div>
+                        <div class="bg-orange-600 p-4 rounded-lg text-center text-white">
+                            <div class="text-sm">Actualizado</div>
+                            <div class="text-sm font-bold">${new Date(data.timestamp).toLocaleTimeString()}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg p-4">
+                        <h3 class="text-xl font-bold mb-4 text-gray-800">📋 Últimas Lecturas (${data.datos.length} registros):</h3>
+                        <div class="max-h-96 overflow-y-auto">
+                `;
+
+                if (data.datos && data.datos.length > 0) {
+                    data.datos.slice(-20).reverse().forEach((lectura, index) => {
+                        const fecha = new Date(lectura.timestamp).toLocaleString();
+                        const esPar = index % 2 === 0;
+                        const bgColor = esPar ? 'bg-gray-50' : 'bg-white';
+                        
+                        html += `
+                            <div class="${bgColor} p-3 border-b border-gray-200">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center">
+                                        <span class="text-2xl font-bold text-blue-600 mr-3">${lectura.valor}${unidad}</span>
+                                        <span class="text-gray-600">Lectura #${data.datos.length - index}</span>
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        ${fecha}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += '<div class="text-center text-gray-500 py-8">No hay datos históricos disponibles</div>';
+                }
+
+                html += `
+                        </div>
+                        <div class="mt-4 text-center">
+                            <button onclick="document.getElementById('resultados').style.display='none'" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg">
+                                Cerrar Historial
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('contenido-resultados').innerHTML = html;
+                
+            } catch (error) {
+                document.getElementById('contenido-resultados').innerHTML = `
+                    <div class="text-center text-red-400">
+                        <h2 class="text-2xl font-bold mb-4">❌ Error al cargar historial</h2>
+                        <p class="text-lg">${error.message}</p>
+                        <button onclick="document.getElementById('resultados').style.display='none'" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mt-4">
+                            Cerrar
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Inicializar
+        verificarEstado();
+        setInterval(verificarEstado, 10000); // Actualizar cada 10 segundos
+        setInterval(obtenerDatosActuales, 5000); // Actualizar datos cada 5 segundos
+    </script>
+</body>
+</html>
