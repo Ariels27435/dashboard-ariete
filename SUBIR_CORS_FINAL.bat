@@ -26,3 +26,4 @@ echo Ahora Render deberia funcionar sin errores de CORS
 echo.
 pause
 
+

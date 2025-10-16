@@ -1,0 +1,112 @@
+GUIÓN VIDEO - SISTEMA ARIETE HIDRÁULICO INTELIGENTE
+=======================================================
+
+DURACIÓN: 5 MINUTOS
+AUTOR: Ariel Celico López de León
+
+INTRODUCCIÓN (30 segundos)
+--------------------------
+"Hola, soy Ariel Celico López de León y les presento mi Sistema de Ariete Hidráulico Inteligente con IoT. Este proyecto integra microcontroladores ESP32, sensores inteligentes y un dashboard web en tiempo real para monitorear y controlar sistemas hidráulicos de manera remota desde cualquier parte del mundo."
+
+1. MANEJO DE SEGURIDAD (1.5 minutos)
+-------------------------------------
+
+Seguridad de Datos:
+"En cuanto a seguridad, el sistema implementa múltiples capas de protección:
+- Autenticación JWT para acceso al dashboard
+- API Keys para validar dispositivos ESP32
+- HTTPS en todas las comunicaciones
+- Validación de datos en el backend para prevenir inyecciones
+- Control de acceso con diferentes roles de usuario"
+
+Seguridad Operacional:
+"Para la seguridad operacional:
+- Alertas automáticas cuando los valores están fuera de rango
+- Monitoreo continuo de humedad, flujo y nivel
+- Logs de eventos para auditoría
+- Reconexión automática del ESP32 en caso de falla de WiFi
+- Respaldos en la nube para máxima confiabilidad"
+
+2. CORE DE LA SOLUCIÓN TECNOLÓGICA (2 minutos)
+----------------------------------------------
+
+Arquitectura del Sistema:
+"El core tecnológico se basa en una arquitectura de microservicios:
+
+Frontend (Dashboard Web):
+- React + Vite para interfaz moderna y responsive
+- Tailwind CSS para diseño profesional
+- Gráficas en tiempo real con actualización automática cada 5 segundos
+- Desplegado en Vercel para alta disponibilidad
+
+Backend (API):
+- Node.js + Express para manejo de datos
+- Endpoints RESTful para comunicación con ESP32
+- Datos en memoria para respuesta ultra-rápida
+- Desplegado en Render con escalabilidad automática
+
+Dispositivos IoT (ESP32):
+- Sensores analógicos para humedad y flujo
+- Sensor digital para nivel de agua
+- Comunicación WiFi con reconexión automática
+- Interrupciones para conteo preciso de pulsos"
+
+Flujo de Datos:
+"Los datos fluyen así: ESP32 → Backend API → Dashboard Web → Usuario. Todo en tiempo real con latencia mínima y escalabilidad para múltiples dispositivos."
+
+3. CONTROLES E INDICADORES (1.5 minutos)
+-----------------------------------------
+
+Indicadores Principales:
+"El sistema muestra tres indicadores críticos:
+
+Sensor de Humedad:
+- Rango: 0-100%
+- Umbral de alerta: 80%
+- Actualización: Cada 5 segundos
+- Visualización: Barra de progreso con colores
+
+Sensor de Flujo:
+- Medición: Litros por minuto (L/min)
+- Precisión: Basada en conteo de pulsos
+- Calibración: 7.5 pulsos por litro
+
+Sensor de Nivel:
+- Estados: 0% (vacío) / 100% (lleno)
+- Tipo: Sensor digital con pull-up
+- Aplicación: Control de tanques y depósitos"
+
+Controles del Sistema:
+"- Dashboard responsive accesible desde cualquier dispositivo
+- Historial de datos con gráficas temporales
+- Configuración de umbrales para alertas personalizadas
+- Exportación de reportes para análisis
+
+Características Técnicas:
+- Latencia: < 5 segundos
+- Disponibilidad: 99.9% (servicios en la nube)
+- Escalabilidad: Soporta múltiples dispositivos ESP32
+- Compatibilidad: Funciona en móviles, tablets y PCs"
+
+DEMOSTRACIÓN EN VIVO (30 segundos)
+-----------------------------------
+"Ahora les muestro el sistema funcionando en tiempo real..."
+
+[Mostrar pantalla del dashboard con datos actualizándose]
+
+"Como pueden ver, los valores se actualizan automáticamente. Este es el Sistema de Ariete Hidráulico Inteligente - una solución completa de IoT para monitoreo hidráulico remoto."
+
+URLs DEL SISTEMA:
+- Dashboard: https://dashboard-ariete.vercel.app
+- Backend API: https://backend-ariete.onrender.com
+
+CHECKLIST PARA GRABACIÓN:
+- Dashboard funcionando con datos reales
+- ESP32 conectado y enviando datos
+- Pantalla limpia del navegador
+- Audio claro y sin ruido de fondo
+- Hablar pausadamente y claro
+- Mostrar el dashboard funcionando
+- Explicar cada componente técnico
+- Demostrar la actualización en tiempo real
+- Mencionar las URLs del sistema

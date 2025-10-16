@@ -26,3 +26,4 @@ echo copia su hash y ejecuta: RESTAURAR_COMMIT.bat [hash]
 echo.
 pause
 
+
