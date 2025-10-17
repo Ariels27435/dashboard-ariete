@@ -27,17 +27,23 @@
   </head>
   <body>
     <div class="min-h-screen flex flex-col">
-      <!-- Botón de historial en esquina superior derecha -->
-      <div class="flex justify-end pt-2 pr-6">
-        <button onclick="window.open('HISTORIAL_FUNCIONANDO.html', '_blank')" 
-                class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-          📊 Ver Historial Completo del Sistema
-        </button>
-      </div>
-
-      <!-- Header con Times New Roman y gradiente -->
-      <div class="text-center pt-2 pb-6">
-        <h1 class="gradient-text text-2xl font-bold mb-2">DASHBOARD ARIETE INTELIGENTE CON MICROSERVICIOS E IOT (INTERNET DE LAS COSAS)</h1>
+      <!-- Header con botón y título alineados -->
+      <div class="flex items-center justify-between pt-4 pb-6 px-6">
+        <!-- Espacio vacío para balance -->
+        <div class="flex-1"></div>
+        
+        <!-- Título centrado -->
+        <div class="flex-1 text-center">
+          <h1 class="gradient-text text-2xl font-bold">DASHBOARD ARIETE INTELIGENTE CON MICROSERVICIOS E IOT (INTERNET DE LAS COSAS)</h1>
+        </div>
+        
+        <!-- Botón de historial -->
+        <div class="flex-1 flex justify-end">
+          <button onclick="window.open('HISTORIAL_FUNCIONANDO.html', '_blank')" 
+                  class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+            📊 Ver Historial Completo del Sistema
+          </button>
+        </div>
       </div>
 
       <!-- Espacio para empujar sensores hacia abajo -->
@@ -129,7 +135,7 @@
               value: data.flujo ?? '--',
               unit: 'L/min',
               status: 'normal',
-              icon: '<img src="water-wave-icon.svg" alt="Flujo" class="w-16 h-16 mx-auto">'
+              icon: '🌊'
             },
             {
               title: 'Nivel',
