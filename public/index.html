@@ -21,7 +21,7 @@
         -webkit-text-fill-color: transparent;
         background-clip: text;
         font-family: 'Times New Roman', serif;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.8));
       }
     </style>
   </head>
@@ -128,7 +128,7 @@
               value: data.nivel ?? '--',
               unit: '%',
               status: data.nivel < 20 ? 'warning' : 'normal',
-              icon: '🏊'
+              icon: '🛢️'
             }
           ];
 
