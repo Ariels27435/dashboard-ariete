@@ -172,3 +172,6 @@ const char* serverURL = "https://backend-ariete.onrender.com";
 ---
 
 **¡MANTÉN ESTA CONFIGURACIÓN FUNCIONAL SIEMPRE PROTEGIDA!** 🔒
+
+
+

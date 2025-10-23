@@ -230,3 +230,6 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`   GET /api/historial/:sensor?limite=50&horas=24`);
   console.log(`   GET /api/estadisticas/:sensor?horas=24`);
 });
+
+
+

@@ -110,3 +110,6 @@ CHECKLIST PARA GRABACIÓN:
 - Explicar cada componente técnico
 - Demostrar la actualización en tiempo real
 - Mencionar las URLs del sistema
+
+
+

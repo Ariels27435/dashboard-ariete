@@ -119,3 +119,6 @@ echo    Dashboard: https://dashboard-ariete-ju4obxqbz-ariel-celico-lopez-de-leon
 echo    Backend: https://backend-ariete.onrender.com
 echo.
 pause
+
+
+

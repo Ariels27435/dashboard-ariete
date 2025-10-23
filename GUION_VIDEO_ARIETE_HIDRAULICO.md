@@ -232,3 +232,6 @@ Sistema de Ariete Hidráulico Inteligente con Microservicios e IoT (Internet de 
 ---
 
 *Este guión está diseñado para cumplir con los requisitos específicos de mostrar manejo de seguridad, core tecnológico y controles/indicadores del sistema, con una duración total de 5 minutos.*
+
+
+

@@ -83,3 +83,6 @@ echo    [Cambiar package.json de vuelta]
 echo    git add . ^&^& git commit -m "RESTORE: Servidor sin historial" ^&^& git push origin main
 echo.
 pause
+
+
+

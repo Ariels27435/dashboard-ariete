@@ -70,3 +70,6 @@ echo    2. Probar el dashboard: https://dashboard-ariete-ju4obxqbz-ariel-celico-
 echo    3. Verificar que el ESP32 envie datos correctamente
 echo.
 pause
+
+
+
