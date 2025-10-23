@@ -70,12 +70,17 @@
                 </h1>
             </div>
 
-            <!-- Botón de Historial Principal -->
+            <!-- Botones Principales -->
             <div class="text-center mb-8">
-                <button onclick="abrirHistorial()" class="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-12 py-6 rounded-xl text-3xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
-                    📊 VER HISTORIAL COMPLETO DEL SISTEMA
-                </button>
-                <p class="text-white mt-4 text-xl drop-shadow">Se abrirá el historial completo en una nueva pestaña</p>
+                <div class="flex justify-center gap-6 mb-4">
+                    <button onclick="abrirHistorial()" class="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-8 py-4 rounded-xl text-2xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+                        📊 VER HISTORIAL COMPLETO
+                    </button>
+                    <button onclick="abrirVideosModal()" class="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-8 py-4 rounded-xl text-2xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+                        🎬 VIDEOS PROYECTO
+                    </button>
+                </div>
+                <p class="text-white mt-4 text-xl drop-shadow">Accede al historial completo y videos del proyecto</p>
             </div>
 
             <!-- Sensor Cards -->
@@ -247,12 +252,100 @@
         </div>
     </div>
 
+    <!-- Modal de Videos -->
+    <div id="videos-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none;">
+        <div class="glass-effect rounded-xl p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-white">🎬 Videos del Proyecto Ariete Hidráulico</h2>
+                <button onclick="cerrarVideosModal()" class="text-white hover:text-red-400 text-3xl font-bold transition-colors">
+                    ✕
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Video 1 -->
+                <div class="glass-effect rounded-lg p-4">
+                    <h3 class="text-xl font-bold text-white mb-3">📹 Video 1</h3>
+                    <div class="aspect-video bg-black rounded-lg overflow-hidden">
+                        <iframe width="100%" height="100%" 
+                                src="https://www.youtube.com/embed/BoG2kIU95rA" 
+                                title="Video 1 - Ariete Hidráulico"
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- Video 2 -->
+                <div class="glass-effect rounded-lg p-4">
+                    <h3 class="text-xl font-bold text-white mb-3">📹 Video 2</h3>
+                    <div class="aspect-video bg-black rounded-lg overflow-hidden">
+                        <iframe width="100%" height="100%" 
+                                src="https://www.youtube.com/embed/miF423qD6Fw" 
+                                title="Video 2 - Ariete Hidráulico"
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- Video 3 -->
+                <div class="glass-effect rounded-lg p-4">
+                    <h3 class="text-xl font-bold text-white mb-3">📹 Video 3</h3>
+                    <div class="aspect-video bg-black rounded-lg overflow-hidden">
+                        <iframe width="100%" height="100%" 
+                                src="https://www.youtube.com/embed/eP96GPZNkTY" 
+                                title="Video 3 - Ariete Hidráulico"
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- Video 4 -->
+                <div class="glass-effect rounded-lg p-4">
+                    <h3 class="text-xl font-bold text-white mb-3">📹 Video 4</h3>
+                    <div class="aspect-video bg-black rounded-lg overflow-hidden">
+                        <iframe width="100%" height="100%" 
+                                src="https://www.youtube.com/embed/Ieg70Yz6O_g" 
+                                title="Video 4 - Ariete Hidráulico"
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-6">
+                <button onclick="cerrarVideosModal()" 
+                        class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg text-lg font-bold transition-colors">
+                    Cerrar Videos
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const API_BASE = 'https://backend-ariete.onrender.com';
 
         // Función para abrir historial
         function abrirHistorial() {
             window.open('HISTORIAL_FUNCIONANDO.html', '_blank');
+        }
+
+        // Funciones para el modal de videos
+        function abrirVideosModal() {
+            document.getElementById('videos-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function cerrarVideosModal() {
+            document.getElementById('videos-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
 
         // Función para mostrar información del ariete
